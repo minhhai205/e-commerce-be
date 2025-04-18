@@ -1,0 +1,40 @@
+package com.minhhai.ecommercebe.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "products_skus")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ProductSku {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String size;
+
+    private String color;
+
+    @Column(nullable = false)
+    @DecimalMin(value = "0", inclusive = false, message = "Price must be greater than 0!")
+    private BigDecimal price;
+
+    @Column(nullable = false)
+    @Min(value = 1, message = "Quantity must be greater than or equal to 0!")
+    private Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+}
