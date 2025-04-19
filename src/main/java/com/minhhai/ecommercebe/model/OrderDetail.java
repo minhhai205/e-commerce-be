@@ -1,8 +1,11 @@
 package com.minhhai.ecommercebe.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "orders_details")
@@ -17,9 +20,9 @@ public class OrderDetail extends AbstractEntity<Long> {
     @Column(name = "quantity")
     private long quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(nullable = false)
+    @DecimalMin(value = "0", inclusive = false, message = "Price must be greater than 0!")
+    private BigDecimal priceEach;
 
     @ManyToOne
     @JoinColumn(name = "product_sku_id")

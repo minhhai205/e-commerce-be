@@ -19,6 +19,6 @@ public class Cart extends AbstractEntity<Integer> {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private Set<CartDetail> cartDetails;
 }

@@ -1,6 +1,7 @@
 package com.minhhai.ecommercebe.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.Date;
@@ -16,23 +17,32 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User extends AbstractEntity<Long> {
-
+    @NotBlank(message = "First name must not be blank!")
     private String firstName;
 
+    @NotBlank(message = "Last name must not be blank!")
     private String lastName;
 
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Email must not be blank!")
     private String email;
 
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Username must not be blank!")
     private String username;
 
+    @Column(nullable = false)
+    @NotBlank(message = "Password must not be blank!")
     private String password;
 
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
-    private String phone;
+    @Column(nullable = false)
+    @NotBlank(message = "Phone number must not be blank!")
+    private String phoneNumber;
 
-    private String avatar;
+    private String urlAvatar;
 
 //    @Enumerated(EnumType.STRING)
 //    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
@@ -58,4 +68,7 @@ public class User extends AbstractEntity<Long> {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Review> reviews;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.HashSet;
@@ -18,11 +19,9 @@ import java.util.Set;
 @Table(name = "permissions")
 public class Permission extends AbstractEntity<Integer> {
 
-    @Column(name = "name")
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Permission's name must be not blank!")
     private String name;
 
-    @Column(name = "description")
     private String description;
-
-
 }

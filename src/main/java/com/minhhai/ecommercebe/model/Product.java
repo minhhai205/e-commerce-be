@@ -17,10 +17,14 @@ import java.util.Set;
 @AllArgsConstructor
 public class Product extends AbstractEntity<Long> {
 
+    @Column(nullable = false)
+    @NotBlank(message = "Product name cannot be blank!")
     private String name;
 
+    @NotBlank(message = "Short description must not be blank!")
     private String shortDesc;
 
+    @NotBlank(message = "Long description must not be blank")
     @Column(columnDefinition = "TEXT")
     private String longDesc;
 
@@ -30,13 +34,10 @@ public class Product extends AbstractEntity<Long> {
     @JoinColumn(name = "category_id")
     private Category category;
 
-//    @OneToMany(mappedBy = "product")
-//    private Set<Review> reviews;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Review> reviews;
 
-//    @OneToMany(mappedBy = "product")
-//    private Set<OrderDetail> orderDetails;
-
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductSku> productSku;
 
 }

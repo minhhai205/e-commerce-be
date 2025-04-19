@@ -1,8 +1,7 @@
 package com.minhhai.ecommercebe.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.HashSet;
@@ -16,10 +15,15 @@ import java.util.Set;
 @Entity
 @Table(name = "categories")
 public class Category extends AbstractEntity<Integer> {
+    @NotBlank(message = "Category name cannot be blank!")
     private String name;
 
     private String description;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     Set<Product> products;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Category parentCategory;
 }

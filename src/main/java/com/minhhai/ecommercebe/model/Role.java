@@ -1,6 +1,7 @@
 package com.minhhai.ecommercebe.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.HashSet;
@@ -15,10 +16,10 @@ import java.util.Set;
 @Table(name = "roles")
 public class Role extends AbstractEntity<Integer> {
 
-    @Column(name = "name")
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Role's name must not be blank!")
     private String name;
 
-    @Column(name = "description")
     private String description;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})

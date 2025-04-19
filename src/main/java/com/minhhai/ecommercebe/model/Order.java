@@ -3,12 +3,10 @@ package com.minhhai.ecommercebe.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,22 +19,24 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order extends AbstractEntity<Long> {
-
+    @NotBlank(message = "Recipient address cannot be blank!")
     private String receiverAddress;
 
-    private String receiverNumber;
+    @NotBlank(message = "Recipient phone number cannot be blank!")
+    private String receiverPhoneNumber;
 
-    @Min(value = 0, message = "value must be greater than 0")
-    private double totalPrice;
+    @Column(nullable = false)
+    @DecimalMin(value = "0", inclusive = false, message = "Total price in order must be greater than 0!")
+    private BigDecimal totalPrice;
 
 //    @NotNull(message = "status must be required")
 //    private OrderStatus status;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
-    @NotNull(message = "Date is required")
+    @NotNull(message = "Date is required!")
     private Date orderAt;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails;
 
     @OneToOne(mappedBy = "order")

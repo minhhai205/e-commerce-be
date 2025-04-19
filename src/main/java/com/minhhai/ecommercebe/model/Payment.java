@@ -2,11 +2,13 @@ package com.minhhai.ecommercebe.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -17,15 +19,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Payment extends AbstractEntity<Long> {
+    @Column(nullable = false)
+    @DecimalMin(value = "0", inclusive = false, message = "Total price in order must be greater than 0!")
+    private BigDecimal totalPrice;
 
-    @Column(name = "price")
-    @Min(value = 0, message = "price must be greater than 0")
-    private double price;
+//    @NotBlank(message = "payment method is required")
+//    private String paymentMethod;
 
-    @Column(name = "payment_method")
-    @NotBlank(message = "payment method is required")
-    private String paymentMethod;
-
+    @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date paymentTime;
 

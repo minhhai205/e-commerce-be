@@ -13,16 +13,12 @@ import lombok.*;
 @AllArgsConstructor
 public class CartDetail extends AbstractEntity<Integer> {
 
-    @Min(value = 1, message = "Quantity must be at least 1")
+    @Min(value = 1, message = "Quantity must be at least 1!")
     private long quantity;
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "product_sku_id")
