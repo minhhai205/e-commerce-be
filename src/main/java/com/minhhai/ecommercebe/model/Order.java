@@ -2,9 +2,13 @@ package com.minhhai.ecommercebe.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.minhhai.ecommercebe.util.annotations.EnumPattern;
+import com.minhhai.ecommercebe.util.enums.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -29,8 +33,10 @@ public class Order extends AbstractEntity<Long> {
     @DecimalMin(value = "0", inclusive = false, message = "Total price in order must be greater than 0!")
     private BigDecimal totalPrice;
 
-//    @NotNull(message = "status must be required")
-//    private OrderStatus status;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @EnumPattern(name = "Order status", regexp = "PENDING|CONFIRMED|SHIPPED|DELIVERED|CANCELLED")
+    private OrderStatus status;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @NotNull(message = "Date is required!")

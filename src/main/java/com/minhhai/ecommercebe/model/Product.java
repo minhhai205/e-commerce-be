@@ -40,4 +40,6 @@ public class Product extends AbstractEntity<Long> {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductSku> productSku;
 
+    private boolean deleted = false;
+
 }

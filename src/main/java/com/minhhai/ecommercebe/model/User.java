@@ -1,8 +1,13 @@
 package com.minhhai.ecommercebe.model;
 
+import com.minhhai.ecommercebe.util.annotations.EnumPattern;
+import com.minhhai.ecommercebe.util.enums.Gender;
+import com.minhhai.ecommercebe.util.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -44,13 +49,15 @@ public class User extends AbstractEntity<Long> {
 
     private String urlAvatar;
 
-//    @Enumerated(EnumType.STRING)
-//    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-//    private Gender gender;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @EnumPattern(name = "Gender user", regexp = "MALE|FEMALE")
+    private Gender gender;
 
-//    @Enumerated(EnumType.STRING)
-//    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-//    private UserStatus status;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @EnumPattern(name = "User status", regexp = "ACTIVE|INACTIVE|LOCKED")
+    private Status status;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<Address> addresses;
@@ -71,4 +78,6 @@ public class User extends AbstractEntity<Long> {
 
     @OneToMany(mappedBy = "user")
     private Set<Review> reviews;
+
+    private boolean deleted = false;
 }

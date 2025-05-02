@@ -26,4 +26,6 @@ public class Category extends AbstractEntity<Integer> {
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
+
+    private boolean deleted = false;
 }

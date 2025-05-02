@@ -35,4 +35,5 @@ public class ProductSku extends AbstractEntity<Long> {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    private boolean deleted = false;
 }
