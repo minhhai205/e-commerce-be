@@ -7,12 +7,9 @@ import com.minhhai.ecommercebe.util.enums.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -34,7 +31,6 @@ public class Order extends AbstractEntity<Long> {
     private BigDecimal totalPrice;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @EnumPattern(name = "Order status", regexp = "PENDING|CONFIRMED|SHIPPED|DELIVERED|CANCELLED")
     private OrderStatus status;
 

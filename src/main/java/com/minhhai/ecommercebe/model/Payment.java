@@ -5,12 +5,7 @@ import com.minhhai.ecommercebe.util.annotations.EnumPattern;
 import com.minhhai.ecommercebe.util.enums.PaymentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -31,7 +26,6 @@ public class Payment extends AbstractEntity<Long> {
 //    private String paymentMethod;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @EnumPattern(name = "Payment status", regexp = "UNPAID|PAID")
     private PaymentStatus paymentStatus;
 

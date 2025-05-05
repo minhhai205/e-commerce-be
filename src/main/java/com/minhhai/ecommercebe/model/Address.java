@@ -22,14 +22,23 @@ public class Address extends AbstractEntity<Long> {
     @NotBlank(message = "District cannot be left blank!")
     private String district;
 
-    @NotBlank(message = "Province can be left blank!")
+    @NotBlank(message = "Province cannot be left blank!")
     private String province;
 
-    @NotBlank(message = "Country can be left blank!")
+    @NotBlank(message = "Country cannot be left blank!")
     private String country;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "country='" + country + '\'' +
+                ", province='" + province + '\'' +
+                ", district='" + district + '\'' +
+                ", detail='" + detail + '\'' +
+                '}';
+    }
 }

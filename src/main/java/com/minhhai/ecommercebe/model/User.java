@@ -4,12 +4,11 @@ import com.minhhai.ecommercebe.util.annotations.EnumPattern;
 import com.minhhai.ecommercebe.util.enums.Gender;
 import com.minhhai.ecommercebe.util.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +29,7 @@ public class User extends AbstractEntity<Long> {
 
     @Column(nullable = false, unique = true)
     @NotBlank(message = "Email must not be blank!")
+    @Email(message = "Email is not valid!")
     private String email;
 
     @Column(nullable = false, unique = true)
@@ -40,8 +40,7 @@ public class User extends AbstractEntity<Long> {
     @NotBlank(message = "Password must not be blank!")
     private String password;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Column(nullable = false)
     @NotBlank(message = "Phone number must not be blank!")
@@ -50,12 +49,10 @@ public class User extends AbstractEntity<Long> {
     private String urlAvatar;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @EnumPattern(name = "Gender user", regexp = "MALE|FEMALE")
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @EnumPattern(name = "User status", regexp = "ACTIVE|INACTIVE|LOCKED")
     private Status status;
 
@@ -80,4 +77,15 @@ public class User extends AbstractEntity<Long> {
     private Set<Review> reviews;
 
     private boolean deleted = false;
+
+    public void addAddress(Address address) {
+        if (address == null) return;
+
+        if (addresses == null) {
+            addresses = new HashSet<>();
+        }
+
+        addresses.add(address);
+        address.setUser(this);
+    }
 }
