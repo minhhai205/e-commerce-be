@@ -5,12 +5,18 @@ import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiErrorResponse;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.mapper.UserMapper;
 import com.minhhai.ecommercebe.model.Cart;
+import com.minhhai.ecommercebe.model.Role;
 import com.minhhai.ecommercebe.model.User;
+import com.minhhai.ecommercebe.repository.RoleRepository;
 import com.minhhai.ecommercebe.repository.UserRepository;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +24,8 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     public Long saveUser(UserRequestDTO userRequestDTO) {
         if (userRepository.existsByUsername(userRequestDTO.getUsername())
@@ -26,7 +34,6 @@ public class UserService {
         }
 
         User user = userMapper.toEntity(userRequestDTO);
-        System.out.println(user.getAddresses());
 
         // set address
         user.getAddresses().forEach(address -> {
@@ -39,8 +46,13 @@ public class UserService {
         cart.setUser(user);
 
         // set role
+        Role role = roleRepository.findByName("USER").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
 
         // hash password
+        passwordEncoder.encode(user.getPassword());
 
         userRepository.save(user);
 
