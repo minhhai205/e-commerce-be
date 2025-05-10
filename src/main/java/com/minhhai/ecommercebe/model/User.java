@@ -56,7 +56,7 @@ public class User extends AbstractEntity<Long> {
     @EnumPattern(name = "User status", regexp = "ACTIVE|INACTIVE|LOCKED")
     private Status status;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Address> addresses;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

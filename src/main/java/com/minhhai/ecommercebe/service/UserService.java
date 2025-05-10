@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -52,12 +53,20 @@ public class UserService {
         user.setRoles(roles);
 
         // hash password
-        passwordEncoder.encode(user.getPassword());
+        user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
 
         userRepository.save(user);
 
         log.info("User has added successfully, userId={}", user.getId());
 
         return user.getId();
+    }
+
+    Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

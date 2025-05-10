@@ -10,10 +10,21 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
+    //    @EntityGraph(attributePaths = {
+//            "roles",
+//            "roles.permissions",
+//            "addresses",
+//            "cart",
+//    })
     @Query("SELECT u FROM User u WHERE u.deleted=false AND u.email=:email")
     Optional<User> findByEmail(@Param("email") String email);
 
+    //    @EntityGraph(attributePaths = {
+//            "roles",
+//            "roles.permissions",
+//            "addresses",
+//            "cart",
+//    })
     @Query("SELECT u FROM User u WHERE u.deleted=false AND u.username=:username")
     Optional<User> findByUsername(@Param("username") String username);
 

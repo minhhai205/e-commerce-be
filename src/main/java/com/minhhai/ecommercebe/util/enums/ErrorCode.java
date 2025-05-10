@@ -9,8 +9,9 @@ public enum ErrorCode {
 
     USER_EXISTED(409, "User existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(400, "User not existed", HttpStatus.BAD_REQUEST),
-    UNAUTHORIZED(401, "Unauthorized", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED(401, "User unauthorized", HttpStatus.UNAUTHORIZED),
     ACCESS_DINED(403, "Access denied", HttpStatus.FORBIDDEN),
+    TOKEN_TYPE_INVALID(400, "Token type invalid", HttpStatus.BAD_REQUEST),
     TOKEN_INVALID(400, "Token invalid", HttpStatus.BAD_REQUEST),
     TOKEN_BLACK_LIST(400, "Token black list", HttpStatus.BAD_REQUEST),
     REFRESH_TOKEN_EXPIRED(401, "Refresh token expired", HttpStatus.BAD_REQUEST),

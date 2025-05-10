@@ -25,7 +25,7 @@ public class UserController {
 
     @PostMapping("/user/create")
     @Operation(method = "POST", summary = "Add new user", description = "Send a request via this API to create new user")
-    public ApiResponse addUser(@Valid @RequestBody UserRequestDTO userDTO) {
+    public ApiSuccessResponse<Long> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
         long userId = userService.saveUser(userDTO);
 
         return ApiSuccessResponse.<Long>builder()
