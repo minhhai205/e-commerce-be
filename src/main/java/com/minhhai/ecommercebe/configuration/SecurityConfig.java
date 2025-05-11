@@ -1,6 +1,7 @@
 package com.minhhai.ecommercebe.configuration;
 
 import com.minhhai.ecommercebe.configuration.filter.JwtFilter;
+import com.minhhai.ecommercebe.configuration.securityCustom.CustomAuthEntryPoint;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.minhhai.ecommercebe.service.JpaUserDetailsService;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,6 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JpaUserDetailsService userDetailsService;
     private final JwtFilter jwtFilter;
+    private final CustomAuthEntryPoint authEntryPoint;
 
     private final String[] WHITE_LIST = {
             "/auth/**"
@@ -44,7 +47,10 @@ public class SecurityConfig {
                         manager -> manager
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(provider())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authEntryPoint)
+                );
 
         return http.build();
     }

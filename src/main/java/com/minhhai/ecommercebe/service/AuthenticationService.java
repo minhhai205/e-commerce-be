@@ -9,6 +9,7 @@ import com.minhhai.ecommercebe.model.User;
 import com.minhhai.ecommercebe.repository.UserRepository;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import com.minhhai.ecommercebe.util.enums.TokenType;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

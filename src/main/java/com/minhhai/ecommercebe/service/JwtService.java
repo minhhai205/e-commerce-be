@@ -2,6 +2,8 @@ package com.minhhai.ecommercebe.service;
 
 import com.minhhai.ecommercebe.configuration.securityModel.SecurityUser;
 import com.minhhai.ecommercebe.exception.AppException;
+import com.minhhai.ecommercebe.exception.JwtException;
+import com.minhhai.ecommercebe.model.Token;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import com.minhhai.ecommercebe.util.enums.TokenType;
 import io.jsonwebtoken.Claims;
@@ -9,9 +11,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -23,6 +28,7 @@ import java.util.function.Function;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class JwtService {
     @Value("${security.jwt.access.expired}")
     private long accessExpired;
@@ -36,8 +42,34 @@ public class JwtService {
     @Value("${security.jwt.refresh.key}")
     private String refreshKey;
 
+    private final TokenService tokenService;
+
     public String generateToken(SecurityUser user, TokenType tokenType) {
         return generateToken(new HashMap<>(), user, tokenType);
+    }
+
+    public void validateToken(String token, TokenType tokenType) {
+        try {
+            extraAllClaim(token, tokenType);
+        } catch (Exception e) {
+            if (tokenType.equals(TokenType.ACCESS_TOKEN)) {
+                throw new JwtException(ErrorCode.ACCESS_TOKEN_INVALID);
+            } else if (tokenType.equals(TokenType.REFRESH_TOKEN)) {
+                throw new JwtException(ErrorCode.REFRESH_TOKEN_INVALID);
+            }
+        }
+        
+        checkToken(token, tokenType);
+    }
+
+    public void checkToken(String token, TokenType tokenType) {
+        if (tokenType.equals(TokenType.ACCESS_TOKEN)) {
+            // check access token in black-list
+            return;
+        } else if (tokenType.equals(TokenType.REFRESH_TOKEN)) {
+            tokenService.findByJti(extractJti(token, tokenType))
+                    .orElseThrow(() -> new JwtException(ErrorCode.REFRESH_TOKEN_INVALID));
+        }
     }
 
     private String generateToken(Map<String, Object> claims, UserDetails userDetails, TokenType tokenType) {
