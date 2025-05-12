@@ -9,11 +9,6 @@ public enum PaymentStatus {
 
     @JsonCreator
     public static PaymentStatus fromString(String value) {
-        if (value == null) return UNKNOWN;
-        try {
-            return PaymentStatus.valueOf(value.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return UNKNOWN;
-        }
+        return EnumUtils.fromString(PaymentStatus.class, value, UNKNOWN);
     }
 }

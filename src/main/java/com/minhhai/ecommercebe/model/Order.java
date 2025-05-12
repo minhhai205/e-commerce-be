@@ -43,4 +43,13 @@ public class Order extends AbstractEntity<Long> {
 
     @OneToOne(mappedBy = "order")
     private Payment payment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
+
 }

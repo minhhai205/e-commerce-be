@@ -10,11 +10,6 @@ public enum Status {
 
     @JsonCreator
     public static Status fromString(String value) {
-        if (value == null) return UNKNOWN;
-        try {
-            return Status.valueOf(value.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return UNKNOWN;
-        }
+        return EnumUtils.fromString(Status.class, value, UNKNOWN);
     }
 }

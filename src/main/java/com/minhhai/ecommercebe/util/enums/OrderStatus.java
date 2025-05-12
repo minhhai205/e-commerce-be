@@ -12,11 +12,6 @@ public enum OrderStatus {
 
     @JsonCreator
     public static OrderStatus fromString(String value) {
-        if (value == null) return UNKNOWN;
-        try {
-            return OrderStatus.valueOf(value.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return UNKNOWN;
-        }
+        return EnumUtils.fromString(OrderStatus.class, value, UNKNOWN);
     }
 }
