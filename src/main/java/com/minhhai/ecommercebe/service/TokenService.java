@@ -12,12 +12,12 @@ import java.util.Optional;
 public class TokenService {
     private final TokenRepository tokenRepository;
 
-    public Token save(Token token) {
-        return tokenRepository.save(token);
+    public void save(Token token) {
+        tokenRepository.save(token);
     }
 
-    public void delete(Token token) {
-        tokenRepository.delete(token);
+    public void deleteByJti(String jti) {
+        tokenRepository.deleteById(jti);
     }
 
     public Optional<Token> findByJti(String jti) {
