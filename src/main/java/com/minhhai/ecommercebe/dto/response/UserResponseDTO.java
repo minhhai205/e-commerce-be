@@ -7,11 +7,19 @@ import com.minhhai.ecommercebe.util.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class UserResponseDTO {
+@Getter
+@Setter
+@Builder
+public class UserResponseDTO implements Serializable {
 
     private String firstName;
 

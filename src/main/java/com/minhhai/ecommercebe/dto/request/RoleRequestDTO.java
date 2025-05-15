@@ -5,11 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
-public class RoleRequestDTO {
+public class RoleRequestDTO implements Serializable {
     @NotBlank(message = "Role's name must not be blank!")
     private String name;
 

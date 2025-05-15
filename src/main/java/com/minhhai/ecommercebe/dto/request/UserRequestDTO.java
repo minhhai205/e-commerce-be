@@ -10,12 +10,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
 @Setter
-public class UserRequestDTO {
+public class UserRequestDTO implements Serializable {
     @NotBlank(message = "First name must not be blank!")
     private String firstName;
 

@@ -5,6 +5,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Setter
 @Getter
 @Builder
@@ -12,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "tokens")
-public class Token {
+public class Token implements Serializable {
     @Id
     private String jti;
 }

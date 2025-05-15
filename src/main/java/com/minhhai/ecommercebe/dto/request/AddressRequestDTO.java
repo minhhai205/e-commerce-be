@@ -4,9 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class AddressRequestDTO {
+public class AddressRequestDTO implements Serializable {
     @NotBlank(message = "Detailed address cannot be left blank!")
     private String detail;
 
