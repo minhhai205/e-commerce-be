@@ -2,6 +2,7 @@ package com.minhhai.ecommercebe.exception;
 
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiErrorResponse;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiResponse;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,12 +29,12 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ExceptionHandler({HttpMessageNotReadableException.class, ConstraintViolationException.class})
     public ApiResponse handleHttpMessageNotReadableException(Exception e, WebRequest request) {
         return ApiErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(e.getMessage())
-                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .error("Invalid Parameter")
                 .build();
     }
 

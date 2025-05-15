@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public enum OrderStatus {
     PENDING,         // Đơn vừa tạo, chờ thanh toán/duyệt
     CONFIRMED,       // Đã xác nhận đơn
+    REJECTED,        // Bị từ chối duyệt
     SHIPPED,         // Đã giao cho đơn vị vận chuyển
     DELIVERED,       // Đã giao thành công
-    CANCELLED,        // Bị huỷ
+    CANCELLED,       // Bị huỷ
     UNKNOWN;
 
     @JsonCreator
