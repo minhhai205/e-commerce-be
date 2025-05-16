@@ -2,6 +2,7 @@ package com.minhhai.ecommercebe.configuration.filter;
 
 
 import com.minhhai.ecommercebe.configuration.securityCustom.CustomAuthEntryPoint;
+import com.minhhai.ecommercebe.configuration.securityModel.PublicUrl;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.exception.JwtException;
 import com.minhhai.ecommercebe.service.JpaUserDetailsService;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -45,7 +47,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         final String authorization = request.getHeader(AUTHORIZATION);
 
-        if (StringUtils.isBlank(authorization) || !authorization.startsWith("Bearer ")) {
+        if (StringUtils.isBlank(authorization)
+                || isPublicUrl(request.getRequestURI())
+                || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -74,5 +78,13 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPublicUrl(String path) {
+        return PublicUrl.WHITE_LIST.stream().anyMatch(publicUrl ->
+                publicUrl.endsWith("/**")
+                        ? path.startsWith(publicUrl.replace("/**", ""))
+                        : path.equals(publicUrl)
+        );
     }
 }

@@ -2,6 +2,8 @@ package com.minhhai.ecommercebe.configuration;
 
 import com.minhhai.ecommercebe.configuration.filter.JwtFilter;
 import com.minhhai.ecommercebe.configuration.securityCustom.CustomAuthEntryPoint;
+import com.minhhai.ecommercebe.configuration.securityModel.PublicUrl;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,21 +28,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
+@Getter
 public class SecurityConfig {
     private final JpaUserDetailsService userDetailsService;
     private final JwtFilter jwtFilter;
     private final CustomAuthEntryPoint authEntryPoint;
-
-    private final String[] WHITE_LIST = {
-            "/auth/**"
-    };
 
     @Bean
     public SecurityFilterChain configure(@NonNull HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
-                                .requestMatchers(WHITE_LIST).permitAll()
+                                .requestMatchers(PublicUrl.WHITE_LIST.toArray(new String[0])).permitAll()
                                 .anyRequest().authenticated())
 
                 .sessionManagement(
