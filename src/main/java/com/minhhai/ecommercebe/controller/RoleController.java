@@ -36,8 +36,8 @@ public class RoleController {
 
     @PostMapping("/role/create")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ApiSuccessResponse<Integer> createRole(@RequestBody @Valid RoleRequestDTO roleRequestDTO) {
-        return ApiSuccessResponse.<Integer>builder()
+    public ApiSuccessResponse<RoleResponseDTO> createRole(@RequestBody @Valid RoleRequestDTO roleRequestDTO) {
+        return ApiSuccessResponse.<RoleResponseDTO>builder()
                 .data(roleService.saveRole(roleRequestDTO))
                 .status(HttpStatus.CREATED.value())
                 .message("Role created successfully!")
@@ -46,12 +46,12 @@ public class RoleController {
 
     @PatchMapping("/role/update/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ApiSuccessResponse<Integer> updateRole(
+    public ApiSuccessResponse<RoleResponseDTO> updateRole(
             @PathVariable("id") @Min(value = 1, message = "Role id must be greater than 0") int id,
             @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
-        return ApiSuccessResponse.<Integer>builder()
+        return ApiSuccessResponse.<RoleResponseDTO>builder()
                 .data(roleService.updateRole(id, roleRequestDTO))
-                .status(HttpStatus.ACCEPTED.value())
+                .status(HttpStatus.OK.value())
                 .message("Role updated successfully!")
                 .build();
     }

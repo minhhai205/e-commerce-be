@@ -26,7 +26,7 @@ public class RoleService {
     private final PermissionRepository permissionRepository;
     private final RoleMapper roleMapper;
 
-    public Integer saveRole(RoleRequestDTO roleRequestDTO) {
+    public RoleResponseDTO saveRole(RoleRequestDTO roleRequestDTO) {
 
         if (roleRepository.existsByName(roleRequestDTO.getName())) {
             throw new AppException(ErrorCode.ROLE_EXISTED);
@@ -40,17 +40,17 @@ public class RoleService {
 
         roleRepository.save(role);
 
-        return role.getId();
+        return roleMapper.toResponseDTO(role);
     }
 
 
     public List<RoleResponseDTO> getAllRoles() {
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = roleRepository.findAllWithPermissions();
 
         return roles.stream().map(roleMapper::toResponseDTO).collect(Collectors.toList());
     }
 
-    public Integer updateRole(Integer id, RoleRequestDTO roleRequestDTO) {
+    public RoleResponseDTO updateRole(Integer id, RoleRequestDTO roleRequestDTO) {
 
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
@@ -66,7 +66,7 @@ public class RoleService {
 
         roleRepository.save(role);
 
-        return role.getId();
+        return roleMapper.toResponseDTO(role);
     }
 
     private Set<Permission> getPermissions(RoleRequestDTO roleRequestDTO) {
