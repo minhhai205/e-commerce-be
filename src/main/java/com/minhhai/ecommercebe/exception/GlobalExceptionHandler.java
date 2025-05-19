@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,7 +30,11 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler({HttpMessageNotReadableException.class, ConstraintViolationException.class})
+    @ExceptionHandler({
+            HttpMessageNotReadableException.class,
+            ConstraintViolationException.class,
+            MethodArgumentTypeMismatchException.class
+    })
     public ApiResponse handleHttpMessageNotReadableException(Exception e, WebRequest request) {
         return ApiErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -47,14 +52,14 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ApiResponse handleException(Exception e, WebRequest request) {
-//        return ApiErrorResponse.builder()
-//                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-//                .message(e.getMessage())
-//                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-//                .build();
-//    }
+    @ExceptionHandler(Exception.class)
+    public ApiResponse handleException(Exception e, WebRequest request) {
+        return ApiErrorResponse.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message(e.getMessage())
+                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .build();
+    }
 }
 
 

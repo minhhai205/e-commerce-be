@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -47,6 +48,9 @@ public class UserRequestDTO implements Serializable {
     @EnumPattern(name = "User status", regexp = "ACTIVE|INACTIVE|LOCKED")
     private Status status;
 
-    @NotNull(message = "Address must not be null!")
+    @NotNull(message = "addresses must not be null!")
     private Set<AddressRequestDTO> addresses;
+
+    @NotNull(message = "roleNames must not be null!")
+    private List<String> roleNames;
 }

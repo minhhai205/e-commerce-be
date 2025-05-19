@@ -18,6 +18,8 @@ public enum ErrorCode {
     ROLE_EXISTED(409, "Role existed", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXISTED(400, "Role not existed", HttpStatus.BAD_REQUEST),
     PERMISSION_NOT_EXISTED(400, "Permission not existed", HttpStatus.BAD_REQUEST),
+    USERNAME_EXISTED(409, "Username existed", HttpStatus.BAD_REQUEST),
+    EMAIL_EXISTED(409, "Email existed", HttpStatus.BAD_REQUEST),
     AUTHORITY_NOT_SUPPORTED(400, "Authority not supported", HttpStatus.BAD_REQUEST);
 
     private final int code;

@@ -12,9 +12,6 @@ import com.minhhai.ecommercebe.util.enums.TokenType;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final AuthenticationManager authenticationManager;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final JwtService jwtService;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
@@ -32,7 +28,7 @@ public class AuthenticationService {
     public TokenResponseDTO authenticate(LoginRequestDTO loginRequestDTO) {
         log.info("---------- authenticate login ----------");
 
-        User user = userService.findByUsername(loginRequestDTO.getUsername())
+        User user = userRepository.findByUsername(loginRequestDTO.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
 
         if (!passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())) {
@@ -65,7 +61,7 @@ public class AuthenticationService {
         jwtService.validateToken(refreshToken, TokenType.REFRESH_TOKEN);
 
         String username = jwtService.extractUsername(refreshToken, TokenType.REFRESH_TOKEN);
-        User user = userService.findByUsername(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         String newAccessToken = jwtService.generateToken(new SecurityUser(user), TokenType.ACCESS_TOKEN);

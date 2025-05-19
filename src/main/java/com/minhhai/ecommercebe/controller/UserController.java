@@ -3,17 +3,18 @@ package com.minhhai.ecommercebe.controller;
 import com.minhhai.ecommercebe.dto.request.UserRequestDTO;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiResponse;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiSuccessResponse;
+import com.minhhai.ecommercebe.dto.response.UserResponseDTO;
 import com.minhhai.ecommercebe.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Validated
@@ -25,6 +26,7 @@ public class UserController {
 
     @PostMapping("/user/create")
     @Operation(method = "POST", summary = "Add new user", description = "Send a request via this API to create new user")
+    @PreAuthorize("hasAnyAuthority('create_user')")
     public ApiSuccessResponse<Long> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
         long userId = userService.saveUser(userDTO);
 
@@ -32,6 +34,20 @@ public class UserController {
                 .data(userId)
                 .status(HttpStatus.OK.value())
                 .message("Create user successfully!")
+                .build();
+    }
+
+    @PatchMapping("/user/update/{id}")
+    @Operation(method = "PATCH", summary = "Update user", description = "Send a request via this API to update user")
+    @PreAuthorize("hasAnyAuthority('update_user')")
+    public ApiSuccessResponse<UserResponseDTO> updateUser(
+            @PathVariable @Min(value = 1, message = "User id must be greater than 0") long id,
+            @Valid @RequestBody UserRequestDTO userDTO) {
+
+        return ApiSuccessResponse.<UserResponseDTO>builder()
+                .data(userService.updateUser(id, userDTO))
+                .status(HttpStatus.OK.value())
+                .message("Update user successfully!")
                 .build();
     }
 }
