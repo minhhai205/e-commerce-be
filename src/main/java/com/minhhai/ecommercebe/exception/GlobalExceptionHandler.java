@@ -5,6 +5,7 @@ import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,6 +41,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(e.getMessage())
                 .error("Invalid Parameter")
+                .build();
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ApiResponse handleAccessDeniedException(Exception e, WebRequest request) {
+        return ApiErrorResponse.builder()
+                .status(HttpStatus.FORBIDDEN.value())
+                .message("Access denied!")
+                .error(HttpStatus.FORBIDDEN.getReasonPhrase())
                 .build();
     }
 

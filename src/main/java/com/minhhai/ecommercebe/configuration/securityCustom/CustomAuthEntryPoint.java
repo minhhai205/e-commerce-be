@@ -16,7 +16,6 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void commence(HttpServletRequest request,
@@ -32,6 +31,7 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
                 .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
                 .build();
 
+        ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(errorResponse);
         response.getWriter().write(json);
     }
