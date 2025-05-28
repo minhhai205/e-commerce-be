@@ -1,7 +1,8 @@
 package com.minhhai.ecommercebe.service;
 
+import com.cosium.spring.data.jpa.entity.graph.domain2.EntityGraph;
 import com.minhhai.ecommercebe.dto.request.UserRequestDTO;
-import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiErrorResponse;
+import com.minhhai.ecommercebe.dto.response.ApiResponse.PageResponse;
 import com.minhhai.ecommercebe.dto.response.UserResponseDTO;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.mapper.AddressMapper;
@@ -12,15 +13,19 @@ import com.minhhai.ecommercebe.model.Role;
 import com.minhhai.ecommercebe.model.User;
 import com.minhhai.ecommercebe.repository.RoleRepository;
 import com.minhhai.ecommercebe.repository.UserRepository;
+import com.minhhai.ecommercebe.repository.specification.SpecificationsBuilder;
+import com.minhhai.ecommercebe.util.commons.AppConst;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,9 +52,9 @@ public class UserService {
         });
 
         // set card
-        Cart cart = new Cart();
-        user.setCart(cart);
-        cart.setUser(user);
+//        Cart cart = new Cart();
+//        user.setCart(cart);
+//        cart.setUser(user);
 
         // set role
         Set<Role> roles = roleRepository.findByNameIn(userRequestDTO.getRoleNames());
@@ -113,6 +118,61 @@ public class UserService {
         log.info("---------User has updated successfully, userId={}----------", user.getId());
 
         return userMapper.toResponseDTO(user);
+    }
+
+    /**
+     * Get all user with pagination, search and filter.
+     *
+     * @param pageable: {
+     *                  "page": x,
+     *                  "size": y,
+     *                  "sort": ["abc:desc|asc", "def:desc|asc"]
+     *                  }
+     * @param filters:  format: "([']?)([\\w]+)([><:~!])(\\*?)([^*]+)(\\*?)"
+     * @return List UserResponseDTO.
+     */
+    public PageResponse<List<UserResponseDTO>> getAllUsers(Pageable pageable, String[] filters) {
+        log.info("-------- Get users by specifications --------");
+
+        if (filters != null) {
+            SpecificationsBuilder builder = new SpecificationsBuilder();
+
+            Pattern pattern = Pattern.compile(AppConst.SEARCH_SPEC_OPERATOR);
+
+            for (String data : filters) {
+                Matcher matcher = pattern.matcher(data);
+
+                if (matcher.find()) {
+
+                    builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4),
+                            matcher.group(5), matcher.group(6));
+                }
+            }
+
+            Page<User> users = userRepository.findAll(Objects.requireNonNull(builder.<User>build()), pageable);
+
+            return convertToPageResponse(users, pageable);
+
+        }
+
+        return convertToPageResponse(userRepository.findAll(pageable), pageable);
+    }
+
+    private PageResponse<List<UserResponseDTO>> convertToPageResponse(Page<User> users, Pageable pageable) {
+        List<Long> userIds = users.getContent().stream().map(User::getId).toList();
+
+        List<User> userList = userRepository.findByIdIn(userIds);
+
+        List<UserResponseDTO> response = userList.stream().map(userMapper::toResponseDTO).toList();
+
+        log.info("--------- Get users successfully ----------");
+
+        return PageResponse.<List<UserResponseDTO>>builder()
+                .pageNo(pageable.getPageNumber())
+                .pageSize(pageable.getPageSize())
+                .totalPage(users.getTotalPages())
+                .items(response)
+                .build();
     }
 
 }

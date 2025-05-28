@@ -3,6 +3,7 @@ package com.minhhai.ecommercebe.exception;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiErrorResponse;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,7 +35,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             HttpMessageNotReadableException.class,
             ConstraintViolationException.class,
-            MethodArgumentTypeMismatchException.class
+            MethodArgumentTypeMismatchException.class,
+            PropertyReferenceException.class
     })
     public ApiResponse handleHttpMessageNotReadableException(Exception e, WebRequest request) {
         return ApiErrorResponse.builder()

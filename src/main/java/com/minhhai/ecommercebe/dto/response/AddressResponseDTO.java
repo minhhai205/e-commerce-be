@@ -12,6 +12,8 @@ import java.io.Serializable;
 @Setter
 @Builder
 public class AddressResponseDTO implements Serializable {
+    private Long id;
+    
     private String detail;
 
     private String district;

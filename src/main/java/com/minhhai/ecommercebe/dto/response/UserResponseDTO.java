@@ -20,6 +20,7 @@ import java.util.Set;
 @Setter
 @Builder
 public class UserResponseDTO implements Serializable {
+    private Long id;
 
     private String firstName;
 
