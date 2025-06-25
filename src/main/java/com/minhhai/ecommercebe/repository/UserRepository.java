@@ -22,7 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
             "roles",
             "roles.permissions",
             "addresses",
-            "cart",
     })
     @Query("SELECT u FROM User u WHERE u.deleted=false AND u.email=:email")
     Optional<User> findByEmail(@Param("email") String email);
@@ -31,10 +30,17 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
             "roles",
             "roles.permissions",
             "addresses",
-            "cart",
     })
     @Query("SELECT u FROM User u WHERE u.deleted=false AND u.username=:username")
     Optional<User> findByUsername(@Param("username") String username);
+
+    @EntityGraph(attributePaths = {
+            "roles",
+            "roles.permissions",
+            "addresses"
+    })
+    @Query("SELECT u FROM User u WHERE u.deleted=false AND u.id=:id")
+    Optional<User> findById(@Param("id") Long userId);
 
     @EntityGraph(attributePaths = {
             "cart",
@@ -49,9 +55,8 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     Page<User> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = {
+            "roles",
             "addresses",
-            "cart",
-            "shop"
     })
     List<User> findByIdIn(List<Long> ids);
 

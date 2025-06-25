@@ -3,6 +3,7 @@ package com.minhhai.ecommercebe.configuration.securityModel;
 import com.minhhai.ecommercebe.model.Permission;
 import com.minhhai.ecommercebe.model.Role;
 import com.minhhai.ecommercebe.model.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Getter
 @AllArgsConstructor
 public class SecurityUser implements UserDetails {
 

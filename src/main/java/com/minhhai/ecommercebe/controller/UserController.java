@@ -32,7 +32,7 @@ public class UserController {
     @Operation(method = "POST", summary = "Add new user", description = "Send a request via this API to create new user")
     @PreAuthorize("hasAnyAuthority('create_user')")
     public ApiSuccessResponse<Long> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
-        long userId = userService.saveUser(userDTO);
+        long userId = userService.createUser(userDTO);
 
         return ApiSuccessResponse.<Long>builder()
                 .data(userId)

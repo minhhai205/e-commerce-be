@@ -1,13 +1,7 @@
 package com.minhhai.ecommercebe.dto.response;
 
-import com.minhhai.ecommercebe.model.*;
-import com.minhhai.ecommercebe.util.annotations.EnumPattern;
 import com.minhhai.ecommercebe.util.enums.Gender;
 import com.minhhai.ecommercebe.util.enums.Status;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,5 +35,7 @@ public class UserResponseDTO implements Serializable {
     private Status status;
 
     private Set<AddressResponseDTO> addresses;
+
+    private Set<String> roleNames;
 
 }

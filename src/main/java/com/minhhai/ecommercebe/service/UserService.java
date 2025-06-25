@@ -38,7 +38,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    public Long saveUser(UserRequestDTO userRequestDTO) {
+    public Long createUser(UserRequestDTO userRequestDTO) {
         if (userRepository.existsByUsername(userRequestDTO.getUsername())
                 || userRepository.existsByEmail(userRequestDTO.getEmail())) {
             throw new AppException(ErrorCode.USER_EXISTED);
