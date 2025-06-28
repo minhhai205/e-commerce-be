@@ -52,6 +52,20 @@ public class ShopController {
                 .build();
     }
 
+    @PatchMapping("/shop/update/{shopId}")
+    @Operation(method = "PATCH", summary = "Admin update shop", description = "Send a request via this API to update shop")
+    @PreAuthorize("hasAnyAuthority('update_shop')")
+    public ApiSuccessResponse<ShopResponseDTO> updateShop(
+            @PathVariable @Min(value = 1, message = "Shop id must be greater than 0") int shopId,
+            @Valid @RequestBody ShopRequestDTO shopRequestDTO
+    ) {
+        return ApiSuccessResponse.<ShopResponseDTO>builder()
+                .data(shopService.adminUpdateShop(shopId, shopRequestDTO))
+                .status(HttpStatus.OK.value())
+                .message("Update shop successfully!")
+                .build();
+    }
+
 
     @PostMapping("/shop/my-shop/create")
     @Operation(method = "POST", summary = "Seller create new shop", description = "Send a request via this API to create new shop")
@@ -76,5 +90,16 @@ public class ShopController {
                 .build();
     }
 
-
+    @PatchMapping("/shop/my-shop/update")
+    @Operation(method = "PATCH", summary = "Seller update shop", description = "Send a request via this API to update shop")
+    @PreAuthorize("hasAnyAuthority('update_shop')")
+    public ApiSuccessResponse<ShopResponseDTO> updateMyShop(
+            @Valid @RequestBody ShopRequestDTO shopRequestDTO
+    ) {
+        return ApiSuccessResponse.<ShopResponseDTO>builder()
+                .data(shopService.updateMyShop(shopRequestDTO))
+                .status(HttpStatus.OK.value())
+                .message("Update shop successfully!")
+                .build();
+    }
 }

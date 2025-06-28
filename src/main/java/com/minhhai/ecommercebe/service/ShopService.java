@@ -58,31 +58,60 @@ public class ShopService {
         newShop.setUser(userRegisterShop);
         shopRepository.save(newShop);
 
-        log.info("------------------ create shop successfully ----------------");
+        log.info("------------------ create shop id={} successfully ----------------", newShop.getId());
         return shopMapper.toResponseDTO(newShop);
     }
 
     public ShopDetailResponseDTO getShopDetailByShopId(Integer shopId) {
-        log.info("------------------ Get Shop Detail ----------------");
 
         Shop shop = shopRepository.findShopById(shopId).orElseThrow(
                 () -> new AppException(ErrorCode.SHOP_NOT_EXISTED));
 
-        log.info("------------------ Get Shop Detail Successfully ----------------");
         return shopMapper.toDetailResponseDTO(shop);
     }
 
     public ShopDetailResponseDTO getMyShopDetail() {
-        log.info("------------------ Get My Shop Detail ----------------");
 
         User shopOwner = SecurityUtil.getCurrentUser();
 
         Shop shop = shopRepository.findShopByUserId(shopOwner.getId()).orElseThrow(
                 () -> new AppException(ErrorCode.SHOP_NOT_EXISTED));
 
-        log.info("------------------ Get My Shop Detail Successfully ----------------");
         return shopMapper.toDetailResponseDTO(shop);
     }
 
+    public ShopResponseDTO adminUpdateShop(Integer shopId, ShopRequestDTO shopRequestDTO) {
+
+        Shop shop = shopRepository.findShopById(shopId).orElseThrow(
+                () -> new AppException(ErrorCode.SHOP_NOT_EXISTED));
+
+        shop.setName(shopRequestDTO.getName());
+        shop.setDescription(shopRequestDTO.getDescription());
+        shop.setUrlAvatar(shopRequestDTO.getUrlAvatar());
+        shop.setShopStatus(shopRequestDTO.getShopStatus());
+
+        shopRepository.save(shop);
+
+        log.info("----------------- Admin Update Shop id = {} successfully ----------------", shop.getId());
+        return shopMapper.toResponseDTO(shop);
+
+    }
+
+    public ShopResponseDTO updateMyShop(ShopRequestDTO shopRequestDTO) {
+        User shopOwner = SecurityUtil.getCurrentUser();
+
+        Shop shop = shopRepository.findShopByUserId(shopOwner.getId()).orElseThrow(
+                () -> new AppException(ErrorCode.SHOP_NOT_EXISTED));
+
+        shop.setName(shopRequestDTO.getName());
+        shop.setDescription(shopRequestDTO.getDescription());
+        shop.setUrlAvatar(shopRequestDTO.getUrlAvatar());
+        shop.setShopStatus(shopRequestDTO.getShopStatus());
+
+        shopRepository.save(shop);
+
+        log.info("--------------- Seller Update Shop id = {} successfully ----------------", shop.getId());
+        return shopMapper.toResponseDTO(shop);
+    }
 
 }
