@@ -1,5 +1,7 @@
 package com.minhhai.ecommercebe.mapper;
 
+import com.minhhai.ecommercebe.dto.request.CategoryRequestDTO;
+import com.minhhai.ecommercebe.dto.response.CategoryResponseDTO;
 import com.minhhai.ecommercebe.model.Category;
 import com.minhhai.ecommercebe.model.Role;
 import org.mapstruct.Mapper;
@@ -11,4 +13,8 @@ public interface CategoryMapper {
     default String toCategoryName(Category category) {
         return category != null ? category.getName() : null;
     }
+
+    Category toEntity(CategoryRequestDTO dto);
+    
+    CategoryResponseDTO toResponseDTO(Category entity);
 }
