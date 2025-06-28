@@ -23,9 +23,5 @@ public class Category extends AbstractEntity<Integer> {
     @OneToMany(mappedBy = "category", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     Set<Product> products;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Category parentCategory;
-
     private boolean deleted = false;
 }

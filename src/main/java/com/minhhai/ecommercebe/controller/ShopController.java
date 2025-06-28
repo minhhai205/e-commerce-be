@@ -2,6 +2,7 @@ package com.minhhai.ecommercebe.controller;
 
 import com.minhhai.ecommercebe.dto.request.ShopRequestDTO;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiSuccessResponse;
+import com.minhhai.ecommercebe.dto.response.ShopDetailResponseDTO;
 import com.minhhai.ecommercebe.dto.response.ShopResponseDTO;
 import com.minhhai.ecommercebe.service.ShopService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +40,18 @@ public class ShopController {
                 .build();
     }
 
+    @GetMapping("/shop/{shopId}")
+    @Operation(method = "GET", summary = "Get shop information", description = "Send a request via this API to get shop information")
+    public ApiSuccessResponse<ShopDetailResponseDTO> getShopDetail(
+            @PathVariable @Min(value = 1, message = "Shop id must be greater than 0") int shopId
+    ) {
+        return ApiSuccessResponse.<ShopDetailResponseDTO>builder()
+                .data(shopService.getShopDetailByShopId(shopId))
+                .status(HttpStatus.OK.value())
+                .message("Get shop detail successfully!")
+                .build();
+    }
+
 
     @PostMapping("/shop/my-shop/create")
     @Operation(method = "POST", summary = "Seller create new shop", description = "Send a request via this API to create new shop")
@@ -51,5 +64,17 @@ public class ShopController {
                 .message("Create shop successfully!")
                 .build();
     }
+
+    @GetMapping("/shop/my-shop/detail")
+    @Operation(method = "GET", summary = "Get my shop information", description = "Send a request via this API to get my shop information")
+    @PreAuthorize("hasAnyRole('SELLER')")
+    public ApiSuccessResponse<ShopDetailResponseDTO> getMyShopDetail() {
+        return ApiSuccessResponse.<ShopDetailResponseDTO>builder()
+                .data(shopService.getMyShopDetail())
+                .status(HttpStatus.OK.value())
+                .message("Get shop detail successfully!")
+                .build();
+    }
+
 
 }

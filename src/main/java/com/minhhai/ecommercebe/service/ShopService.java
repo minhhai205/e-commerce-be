@@ -1,6 +1,7 @@
 package com.minhhai.ecommercebe.service;
 
 import com.minhhai.ecommercebe.dto.request.ShopRequestDTO;
+import com.minhhai.ecommercebe.dto.response.ShopDetailResponseDTO;
 import com.minhhai.ecommercebe.dto.response.ShopResponseDTO;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.mapper.ShopMapper;
@@ -60,5 +61,28 @@ public class ShopService {
         log.info("------------------ create shop successfully ----------------");
         return shopMapper.toResponseDTO(newShop);
     }
+
+    public ShopDetailResponseDTO getShopDetailByShopId(Integer shopId) {
+        log.info("------------------ Get Shop Detail ----------------");
+
+        Shop shop = shopRepository.findShopById(shopId).orElseThrow(
+                () -> new AppException(ErrorCode.SHOP_NOT_EXISTED));
+
+        log.info("------------------ Get Shop Detail Successfully ----------------");
+        return shopMapper.toDetailResponseDTO(shop);
+    }
+
+    public ShopDetailResponseDTO getMyShopDetail() {
+        log.info("------------------ Get My Shop Detail ----------------");
+
+        User shopOwner = SecurityUtil.getCurrentUser();
+
+        Shop shop = shopRepository.findShopByUserId(shopOwner.getId()).orElseThrow(
+                () -> new AppException(ErrorCode.SHOP_NOT_EXISTED));
+
+        log.info("------------------ Get My Shop Detail Successfully ----------------");
+        return shopMapper.toDetailResponseDTO(shop);
+    }
+
 
 }
