@@ -23,6 +23,8 @@ public enum ErrorCode {
     SELLER_ALREADY_HAS_SHOP(409, "Seller already has shop", HttpStatus.CONFLICT),
     AUTHORITY_NOT_SUPPORTED(400, "Authority not supported", HttpStatus.BAD_REQUEST),
     SHOP_NOT_EXISTED(400, "Shop not existed", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_EXISTED(400, "Product not existed", HttpStatus.BAD_REQUEST),
+    PRODUCT_SKU_NOT_EXISTED(400, "Product sku not existed", HttpStatus.BAD_REQUEST),
     CATEGORY_NOT_EXISTED(400, "Category not existed", HttpStatus.BAD_REQUEST);
 
     private final int code;

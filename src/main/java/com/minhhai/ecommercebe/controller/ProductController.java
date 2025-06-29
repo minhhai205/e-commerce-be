@@ -1,6 +1,7 @@
 package com.minhhai.ecommercebe.controller;
 
 import com.minhhai.ecommercebe.dto.request.ProductRequestDTO;
+import com.minhhai.ecommercebe.dto.request.ProductUpdateRequestDTO;
 import com.minhhai.ecommercebe.dto.request.UserRequestDTO;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiSuccessResponse;
 import com.minhhai.ecommercebe.dto.response.ProductDetailResponseDTO;
@@ -37,17 +38,17 @@ public class ProductController {
                 .build();
     }
 
-//    @PatchMapping("/product/update/{productId}")
-//    @Operation(method = "PATCH", summary = "Update product", description = "Send a request via this API to update product")
-//    @PreAuthorize("hasAnyRole({'SELLER'})")
-//    public ApiSuccessResponse<ProductDetailResponseDTO> updateProduct(
-//            @PathVariable @Min(value = 1, message = "Product id must be greater than 0") long productId,
-//            @Valid @RequestBody ProductRequestDTO productRequestDTO) {
-//
-//        return ApiSuccessResponse.<ProductDetailResponseDTO>builder()
-//                .data(productService.updateProduct(productId, productRequestDTO))
-//                .status(HttpStatus.OK.value())
-//                .message("Update product successfully!")
-//                .build();
-//    }
+    @PatchMapping("/product/update/{productId}")
+    @Operation(method = "PATCH", summary = "Update product", description = "Send a request via this API to update product")
+    @PreAuthorize("hasAnyRole({'SELLER'})")
+    public ApiSuccessResponse<ProductDetailResponseDTO> updateProduct(
+            @PathVariable @Min(value = 1, message = "Product id must be greater than 0") long productId,
+            @Valid @RequestBody ProductUpdateRequestDTO productUpdateRequestDTO) {
+
+        return ApiSuccessResponse.<ProductDetailResponseDTO>builder()
+                .data(productService.updateProduct(productId, productUpdateRequestDTO))
+                .status(HttpStatus.OK.value())
+                .message("Update product successfully!")
+                .build();
+    }
 }
