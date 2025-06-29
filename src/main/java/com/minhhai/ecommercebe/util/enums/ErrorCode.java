@@ -20,6 +20,7 @@ public enum ErrorCode {
     PERMISSION_NOT_EXISTED(400, "Permission not existed", HttpStatus.BAD_REQUEST),
     USERNAME_EXISTED(409, "Username existed", HttpStatus.CONFLICT),
     EMAIL_EXISTED(409, "Email existed", HttpStatus.CONFLICT),
+    CATEGORY_EXISTED(409, "Category existed", HttpStatus.CONFLICT),
     SELLER_ALREADY_HAS_SHOP(409, "Seller already has shop", HttpStatus.CONFLICT),
     AUTHORITY_NOT_SUPPORTED(400, "Authority not supported", HttpStatus.BAD_REQUEST),
     SHOP_NOT_EXISTED(400, "Shop not existed", HttpStatus.BAD_REQUEST),

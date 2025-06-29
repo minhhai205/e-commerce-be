@@ -27,6 +27,10 @@ public class CategoryService {
     }
 
     public CategoryResponseDTO createCategory(CategoryRequestDTO categoryRequestDTO) {
+        if (categoryRepository.existsByName(categoryRequestDTO.getName())) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+        }
+
         Category category = categoryMapper.toEntity(categoryRequestDTO);
 
         category = categoryRepository.save(category);
@@ -36,9 +40,13 @@ public class CategoryService {
     }
 
     public CategoryResponseDTO updateCategory(Integer categoryId, CategoryRequestDTO categoryRequestDTO) {
-
         Category categoryUpdate = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
+
+        if (!categoryUpdate.getName().equals(categoryRequestDTO.getName())
+                && categoryRepository.existsByName(categoryRequestDTO.getName())) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+        }
 
         categoryUpdate.setName(categoryRequestDTO.getName());
         categoryUpdate.setDescription(categoryRequestDTO.getDescription());
