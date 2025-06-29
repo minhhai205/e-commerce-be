@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -38,4 +39,14 @@ public class Shop extends AbstractEntity<Integer> {
 
     @OneToMany(mappedBy = "shop")
     private Set<Order> orders;
+
+//    public void addProduct(Product product) {
+//        if (product != null) {
+//            if (products == null) {
+//                products = new HashSet<>();
+//            }
+//            products.add(product);
+//            product.setShop(this);
+//        }
+//    }
 }
