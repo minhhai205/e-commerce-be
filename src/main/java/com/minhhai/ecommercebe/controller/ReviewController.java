@@ -29,13 +29,11 @@ public class ReviewController {
 
     @GetMapping("/review/product/{productId}")
     @Operation(method = "GET", summary = "Get all product reviews", description = "Send a request via this API to get all product reviews")
-    public ApiSuccessResponse<PageResponse<List<ReviewResponseDTO>>> getAllProductReviews(
-            @PathVariable @Min(value = 1, message = "Product id must be greater than 0") long productId,
-            Pageable pageable,
-            @RequestParam(required = false) String[] filters
+    public ApiSuccessResponse<List<ReviewResponseDTO>> getAllProductReviews(
+            @PathVariable @Min(value = 1, message = "Product id must be greater than 0") long productId
     ) {
-        return ApiSuccessResponse.<PageResponse<List<ReviewResponseDTO>>>builder()
-                .data(reviewService.getAllProductReviews(productId, pageable, filters))
+        return ApiSuccessResponse.<List<ReviewResponseDTO>>builder()
+                .data(reviewService.getAllProductReviews(productId))
                 .status(HttpStatus.OK.value())
                 .message("Get all product reviews successfully!")
                 .build();

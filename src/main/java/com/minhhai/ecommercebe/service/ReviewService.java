@@ -29,8 +29,10 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final ReviewMapper reviewMapper;
 
-    public PageResponse<List<ReviewResponseDTO>> getAllProductReviews(Long productId, Pageable pageable, String[] filters) {
-        return null;
+    public List<ReviewResponseDTO> getAllProductReviews(Long productId) {
+        List<Review> reviews = reviewRepository.findReviewByProductId(productId);
+
+        return reviews.stream().map(reviewMapper::toResponseDTO).toList();
     }
 
     public ReviewResponseDTO createNewReview(ReviewRequestDTO reviewRequestDTO) {
