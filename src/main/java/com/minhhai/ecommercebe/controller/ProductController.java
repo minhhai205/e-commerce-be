@@ -4,6 +4,7 @@ import com.minhhai.ecommercebe.dto.request.ProductRequestDTO;
 import com.minhhai.ecommercebe.dto.request.ProductUpdateRequestDTO;
 import com.minhhai.ecommercebe.dto.request.UserRequestDTO;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiSuccessResponse;
+import com.minhhai.ecommercebe.dto.response.ApiResponse.PageResponse;
 import com.minhhai.ecommercebe.dto.response.ProductDetailResponseDTO;
 import com.minhhai.ecommercebe.dto.response.ProductResponseDTO;
 import com.minhhai.ecommercebe.dto.response.UserResponseDTO;
@@ -14,10 +15,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Validated
@@ -51,4 +55,29 @@ public class ProductController {
                 .message("Update product successfully!")
                 .build();
     }
+
+    @GetMapping("/product/{productId}")
+    @Operation(method = "GET", summary = "Get product detail", description = "Send a request via this API to get product")
+    public ApiSuccessResponse<ProductDetailResponseDTO> getProductDetail(
+            @PathVariable @Min(value = 1, message = "Product id must be greater than 0") long productId
+    ) {
+        return ApiSuccessResponse.<ProductDetailResponseDTO>builder()
+                .data(productService.getProductDetailByProductId(productId))
+                .status(HttpStatus.OK.value())
+                .message("Get product successfully!")
+                .build();
+    }
+
+//    @GetMapping("/product")
+//    @Operation(method = "GET", summary = "Get all product with pagination, search and filter", description = "Send a request via this API to get all product")
+//    public ApiSuccessResponse<PageResponse<List<ProductResponseDTO>>> getAllProducts(
+//            Pageable pageable,
+//            @RequestParam(required = false) String[] filters
+//    ) {
+//        return ApiSuccessResponse.<PageResponse<List<ProductResponseDTO>>>builder()
+//                .data(productService.getAllProducts(pageable, filters))
+//                .status(HttpStatus.OK.value())
+//                .message("Get products successfully!")
+//                .build();
+//    }
 }

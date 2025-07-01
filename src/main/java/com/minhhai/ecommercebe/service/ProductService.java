@@ -3,8 +3,10 @@ package com.minhhai.ecommercebe.service;
 import com.minhhai.ecommercebe.dto.request.ProductRequestDTO;
 import com.minhhai.ecommercebe.dto.request.ProductSkuUpdateRequestDTO;
 import com.minhhai.ecommercebe.dto.request.ProductUpdateRequestDTO;
+import com.minhhai.ecommercebe.dto.response.ApiResponse.PageResponse;
 import com.minhhai.ecommercebe.dto.response.ProductDetailResponseDTO;
 import com.minhhai.ecommercebe.dto.response.ProductResponseDTO;
+import com.minhhai.ecommercebe.dto.response.UserResponseDTO;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.mapper.ProductMapper;
 import com.minhhai.ecommercebe.model.*;
@@ -15,12 +17,10 @@ import com.minhhai.ecommercebe.util.commons.SecurityUtil;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,4 +109,15 @@ public class ProductService {
         log.info("----------- Updated product successfully id = {} ------------", productUpdate.getId());
         return productMapper.toDetailResponseDTO(productUpdate);
     }
+
+    public ProductDetailResponseDTO getProductDetailByProductId(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new AppException(ErrorCode.PRODUCT_NOT_EXISTED));
+
+        return productMapper.toDetailResponseDTO(product);
+    }
+
+//    public PageResponse<List<ProductResponseDTO>> getAllProducts(Pageable pageable, String[] filters) {
+//        return null;
+//    }
 }

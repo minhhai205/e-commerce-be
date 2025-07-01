@@ -136,23 +136,19 @@ public class UserService {
 
         if (filters != null) {
             SpecificationsBuilder builder = new SpecificationsBuilder();
-
             Pattern pattern = Pattern.compile(AppConst.SEARCH_SPEC_OPERATOR);
 
             for (String data : filters) {
                 Matcher matcher = pattern.matcher(data);
 
                 if (matcher.find()) {
-
                     builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4),
                             matcher.group(5), matcher.group(6));
                 }
             }
 
             Page<User> users = userRepository.findAll(Objects.requireNonNull(builder.<User>build()), pageable);
-
             return convertToPageResponse(users, pageable);
-
         }
 
         return convertToPageResponse(userRepository.findAll(pageable), pageable);
