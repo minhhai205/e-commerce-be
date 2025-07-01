@@ -14,4 +14,9 @@ public interface UserMapper {
 
     @Mapping(target = "roleNames", source = "roles", qualifiedByName = "toRoleName")
     UserResponseDTO toResponseDTO(User entity);
+
+    @Named("toUserId")
+    default Long toUserId(User user) {
+        return user.getId();
+    }
 }

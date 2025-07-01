@@ -69,6 +69,7 @@ public class ShopController {
 
     @PostMapping("/shop/my-shop/create")
     @Operation(method = "POST", summary = "Seller create new shop", description = "Send a request via this API to create new shop")
+    @PreAuthorize("hasAnyRole({'CUSTOMER', 'SELLER'})")
     public ApiSuccessResponse<ShopResponseDTO> registerMyShop(
             @Valid @RequestBody ShopRequestDTO shopRequestDTO
     ) {
@@ -92,7 +93,7 @@ public class ShopController {
 
     @PatchMapping("/shop/my-shop/update")
     @Operation(method = "PATCH", summary = "Seller update shop", description = "Send a request via this API to update shop")
-    @PreAuthorize("hasAnyAuthority('update_shop')")
+    @PreAuthorize("hasAnyRole({'SELLER'})")
     public ApiSuccessResponse<ShopResponseDTO> updateMyShop(
             @Valid @RequestBody ShopRequestDTO shopRequestDTO
     ) {
