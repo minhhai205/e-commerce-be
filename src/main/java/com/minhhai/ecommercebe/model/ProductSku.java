@@ -31,7 +31,7 @@ public class ProductSku extends AbstractEntity<Long> {
     @Min(value = 0, message = "Quantity must be greater than or equal to 0!")
     private Integer quantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 

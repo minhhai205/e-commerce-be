@@ -52,9 +52,9 @@ public class UserService {
         });
 
         // set card
-//        Cart cart = new Cart();
-//        user.setCart(cart);
-//        cart.setUser(user);
+        Cart cart = new Cart();
+        user.setCart(cart);
+        cart.setUser(user);
 
         // set role
         Set<Role> roles = roleRepository.findByNameIn(userRequestDTO.getRoleNames());

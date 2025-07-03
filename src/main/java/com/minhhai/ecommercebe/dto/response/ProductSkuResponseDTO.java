@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 public class ProductSkuResponseDTO implements Serializable {
+    private Long id;
+
     private String size;
 
     private String color;

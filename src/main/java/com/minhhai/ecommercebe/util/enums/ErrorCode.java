@@ -28,6 +28,8 @@ public enum ErrorCode {
     SHOP_NOT_EXISTED(400, "Shop not existed", HttpStatus.BAD_REQUEST),
     PRODUCT_NOT_EXISTED(400, "Product not existed", HttpStatus.BAD_REQUEST),
     REVIEW_NOT_EXISTED(400, "Review not existed", HttpStatus.BAD_REQUEST),
+    CART_NOT_EXISTED(400, "Cart not existed", HttpStatus.BAD_REQUEST),
+    CART_ITEM_NOT_EXISTED(400, "Cart item not existed", HttpStatus.BAD_REQUEST),
     PRODUCT_SKU_NOT_EXISTED(400, "Product sku not existed", HttpStatus.BAD_REQUEST),
     CATEGORY_NOT_EXISTED(400, "Category not existed", HttpStatus.BAD_REQUEST);
 

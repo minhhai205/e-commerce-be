@@ -16,6 +16,8 @@ import java.io.Serializable;
 @Setter
 @Builder
 public class ReviewResponseDTO implements Serializable {
+    private Long id;
+
     private Integer rate;
 
     private String description;
