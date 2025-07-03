@@ -34,10 +34,6 @@ public class Order extends AbstractEntity<Long> {
     @EnumPattern(name = "Order status", regexp = "PENDING|CONFIRMED|SHIPPED|DELIVERED|CANCELLED")
     private OrderStatus status;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @NotNull(message = "Date is required!")
-    private Date orderAt;
-
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails;
 

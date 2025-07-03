@@ -24,11 +24,11 @@ public class OrderDetail extends AbstractEntity<Long> {
     @DecimalMin(value = "0", inclusive = false, message = "Price must be greater than 0!")
     private BigDecimal priceEach;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_sku_id")
     private ProductSku productSku;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 
