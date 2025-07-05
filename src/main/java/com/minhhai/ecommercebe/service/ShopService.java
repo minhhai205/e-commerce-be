@@ -16,6 +16,7 @@ import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class ShopService {
     private final RoleRepository roleRepository;
     private final ShopMapper shopMapper;
 
+    @Transactional
     public ShopResponseDTO adminCreateShop(Long userId, ShopRequestDTO shopRequestDTO) {
         log.info("----------------- Admin Create Shop -------------------");
 
@@ -35,6 +37,7 @@ public class ShopService {
         return processCreateShop(userRegisterShop, shopRequestDTO);
     }
 
+    @Transactional
     public ShopResponseDTO sellerRegisterShop(ShopRequestDTO shopRequestDTO) {
         log.info("----------------- Seller Register Shop ------------------");
 
@@ -42,6 +45,7 @@ public class ShopService {
 
         return processCreateShop(userRegisterShop, shopRequestDTO);
     }
+
 
     private ShopResponseDTO processCreateShop(User userRegisterShop, ShopRequestDTO shopRequestDTO) {
 

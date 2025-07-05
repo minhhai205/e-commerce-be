@@ -31,6 +31,7 @@ public enum ErrorCode {
     CART_NOT_EXISTED(400, "Cart not existed", HttpStatus.BAD_REQUEST),
     CART_ITEM_NOT_EXISTED(400, "Cart item not existed", HttpStatus.BAD_REQUEST),
     PRODUCT_SKU_NOT_EXISTED(400, "Product sku not existed", HttpStatus.BAD_REQUEST),
+    PRODUCT_OUT_OF_STOCK(400, "Product out of stock", HttpStatus.BAD_REQUEST),
     CATEGORY_NOT_EXISTED(400, "Category not existed", HttpStatus.BAD_REQUEST);
 
     private final int code;
