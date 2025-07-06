@@ -2,6 +2,7 @@ package com.minhhai.ecommercebe.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.minhhai.ecommercebe.util.annotations.EnumPattern;
+import com.minhhai.ecommercebe.util.enums.PaymentMethod;
 import com.minhhai.ecommercebe.util.enums.PaymentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -22,14 +23,14 @@ public class Payment extends AbstractEntity<Long> {
     @DecimalMin(value = "0", inclusive = false, message = "Total price in order must be greater than 0!")
     private BigDecimal totalPrice;
 
-//    @NotBlank(message = "payment method is required")
-//    private String paymentMethod;
+    @Enumerated(EnumType.STRING)
+    @EnumPattern(name = "Payment method", regexp = "COD|VNPAY")
+    private PaymentMethod paymentMethod;
 
     @Enumerated(EnumType.STRING)
     @EnumPattern(name = "Payment status", regexp = "UNPAID|PAID")
     private PaymentStatus paymentStatus;
 
-    @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date paymentTime;
 

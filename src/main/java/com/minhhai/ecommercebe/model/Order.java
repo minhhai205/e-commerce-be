@@ -37,7 +37,7 @@ public class Order extends AbstractEntity<Long> {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderDetail> orderDetails;
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
     @ManyToOne(fetch = FetchType.LAZY)

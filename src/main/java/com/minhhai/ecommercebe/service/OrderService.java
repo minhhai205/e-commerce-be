@@ -11,6 +11,8 @@ import com.minhhai.ecommercebe.repository.ProductSkuRepository;
 import com.minhhai.ecommercebe.util.commons.SecurityUtil;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import com.minhhai.ecommercebe.util.enums.OrderStatus;
+import com.minhhai.ecommercebe.util.enums.PaymentMethod;
+import com.minhhai.ecommercebe.util.enums.PaymentStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,9 +53,6 @@ public class OrderService {
             if (cartDetail == null) {
                 throw new AppException(ErrorCode.CART_ITEM_NOT_EXISTED);
             }
-
-            // Xóa sản phẩm order ra khỏi giỏ hàng
-            cart.getCartDetails().removeIf(cd -> cd.getId().equals(cartDetailId));
 
             ProductSku productSkuWithOrder = cartDetail.getProductSku();
             long quantityOrder = cartDetail.getQuantity();
@@ -104,17 +103,33 @@ public class OrderService {
                 order.setTotalPrice(order.getTotalPrice().add(newOrderDetail.getPriceEach()));
             }
 
-            // Cập nhập lại số lượng sản phẩm trong giỏ hàng
+            // Cập nhập lại số lượng sản phẩm còn lại sau khi order
             productSkuWithOrder.setQuantity((int) (productSkuWithOrder.getQuantity() - quantityOrder));
+            // Xóa sản phẩm order ra khỏi giỏ hàng
+            cart.getCartDetails().removeIf(cd -> cd.getId().equals(cartDetailId));
         });
 
-
-//        orderRepository.saveAll(shopWithOrdersMap.values());
+        createPayment(shopWithOrdersMap.values().stream().toList(), orderRequestDTO.getPaymentMethod(), userOrder);
+        orderRepository.saveAll(shopWithOrdersMap.values());
         cartRepository.save(cart);
         productSkuRepository.saveAll(cart.getCartDetails().stream().map(CartDetail::getProductSku).toList());
 
         log.info("---------------- Order created successfully ----------------");
 
         return shopWithOrdersMap.values().stream().map(orderMapper::toResponseDTO).toList();
+    }
+
+    private void createPayment(List<Order> orders, PaymentMethod paymentMethod, User userOrder) {
+        orders.forEach(order -> {
+            Payment newPayment = Payment.builder()
+                    .totalPrice(order.getTotalPrice())
+                    .paymentMethod(paymentMethod)
+                    .paymentStatus(PaymentStatus.UNPAID)
+                    .order(order)
+                    .user(userOrder)
+                    .build();
+
+            order.setPayment(newPayment);
+        });
     }
 }
