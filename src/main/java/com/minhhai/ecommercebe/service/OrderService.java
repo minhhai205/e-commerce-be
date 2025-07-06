@@ -8,6 +8,7 @@ import com.minhhai.ecommercebe.model.*;
 import com.minhhai.ecommercebe.repository.CartRepository;
 import com.minhhai.ecommercebe.repository.OrderRepository;
 import com.minhhai.ecommercebe.repository.ProductSkuRepository;
+import com.minhhai.ecommercebe.repository.ShopRepository;
 import com.minhhai.ecommercebe.util.commons.SecurityUtil;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import com.minhhai.ecommercebe.util.enums.OrderStatus;
@@ -32,6 +33,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final ProductSkuRepository productSkuRepository;
+    private final ShopRepository shopRepository;
     private final OrderMapper orderMapper;
 
     @Transactional
@@ -132,4 +134,26 @@ public class OrderService {
             order.setPayment(newPayment);
         });
     }
+
+    public List<OrderResponseDTO> viewAllMyOrder() {
+        Long currentUserId = SecurityUtil.getCurrentUser().getId();
+        List<Order> orders = orderRepository.findAllOrderByUserId(currentUserId);
+        return orders.stream().map(orderMapper::toResponseDTO).toList();
+    }
+
+    public List<OrderResponseDTO> viewAllShopOrder() {
+        Long currentUserId = SecurityUtil.getCurrentUser().getId();
+        Shop shop = shopRepository.findShopByUserId(currentUserId).orElseThrow(
+                () -> new AppException(ErrorCode.SHOP_NOT_EXISTED));
+        List<Order> orders = orderRepository.findAllOrderByShopId(shop.getId());
+        return orders.stream().map(orderMapper::toResponseDTO).toList();
+    }
+
+//    public Long userCancelOrder(Long orderId) {
+//        return null;
+//    }
+//
+//    public Long shopUpdateOrder(Long orderId) {
+//        return null;
+//    }
 }
