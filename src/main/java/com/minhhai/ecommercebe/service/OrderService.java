@@ -1,6 +1,7 @@
 package com.minhhai.ecommercebe.service;
 
 import com.minhhai.ecommercebe.dto.request.OrderRequestDTO;
+import com.minhhai.ecommercebe.dto.request.OrderUpdateRequestDTO;
 import com.minhhai.ecommercebe.dto.response.OrderResponseDTO;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.mapper.OrderMapper;
@@ -149,11 +150,56 @@ public class OrderService {
         return orders.stream().map(orderMapper::toResponseDTO).toList();
     }
 
-//    public Long userCancelOrder(Long orderId) {
-//        return null;
-//    }
-//
-//    public Long shopUpdateOrder(Long orderId) {
-//        return null;
-//    }
+    public Long userCancelOrder(Long orderId) {
+        Order orderUpdate = orderRepository.findOrderById(orderId).orElseThrow(
+                () -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
+        Long currentUserId = SecurityUtil.getCurrentUser().getId();
+
+        if (!currentUserId.equals(orderUpdate.getUser().getId())) {
+            throw new AppException(ErrorCode.FORBIDDEN_UPDATE_ORDER);
+        }
+
+        if (orderUpdate.getStatus().equals(OrderStatus.CANCELLED)) {
+            throw new AppException(ErrorCode.ORDER_UPDATE_FAILED);
+        }
+
+        orderUpdate.setStatus(OrderStatus.CANCELLED);
+        updateProductWhenCancelOrder(orderUpdate);
+
+        orderRepository.save(orderUpdate);
+        return orderUpdate.getId();
+    }
+
+    public Long shopUpdateOrder(Long orderId, OrderUpdateRequestDTO orderUpdateRequestDTO) {
+        Order orderUpdate = orderRepository.findOrderById(orderId).orElseThrow(
+                () -> new AppException(ErrorCode.ORDER_NOT_EXISTED));
+        Long currentUserId = SecurityUtil.getCurrentUser().getId();
+        Shop shop = shopRepository.findShopByUserId(currentUserId).orElseThrow(
+                () -> new AppException(ErrorCode.SHOP_NOT_EXISTED));
+        OrderStatus orderStatusUpdate = orderUpdateRequestDTO.getStatus();
+
+        if (!orderUpdate.getShop().getId().equals(shop.getId())) {
+            throw new AppException(ErrorCode.FORBIDDEN_UPDATE_ORDER);
+        }
+
+        if (!orderUpdate.getStatus().equals(orderStatusUpdate)) {
+            orderUpdate.setStatus(orderStatusUpdate);
+            if (orderStatusUpdate.equals(OrderStatus.CANCELLED)) {
+                updateProductWhenCancelOrder(orderUpdate);
+            }
+        }
+
+        orderRepository.save(orderUpdate);
+        return orderUpdate.getId();
+    }
+
+    private void updateProductWhenCancelOrder(Order order) {
+        order.getOrderDetails().forEach(orderDetail -> {
+            orderDetail.getProductSku().setQuantity((int)
+                    (orderDetail.getProductSku().getQuantity() + orderDetail.getQuantity()));
+        });
+
+        productSkuRepository.saveAll(order.getOrderDetails().stream()
+                .map(OrderDetail::getProductSku).toList());
+    }
 }

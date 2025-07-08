@@ -1,6 +1,7 @@
 package com.minhhai.ecommercebe.controller;
 
 import com.minhhai.ecommercebe.dto.request.OrderRequestDTO;
+import com.minhhai.ecommercebe.dto.request.OrderUpdateRequestDTO;
 import com.minhhai.ecommercebe.dto.request.UserRequestDTO;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiSuccessResponse;
 import com.minhhai.ecommercebe.dto.response.OrderResponseDTO;
@@ -56,28 +57,29 @@ public class OrderController {
                 .build();
     }
 
-//    @PatchMapping("/order/my-order/cancel/{orderId}")
-//    @PreAuthorize("hasAnyRole({'CUSTOMER'})")
-//    public ApiSuccessResponse<Long> userCancelOrder(
-//            @PathVariable @Min(value = 1, message = "Order id must be greater than 0") long orderId
-//    ) {
-//        return ApiSuccessResponse.<Long>builder()
-//                .data(orderService.userCancelOrder(orderId))
-//                .status(HttpStatus.OK.value())
-//                .message("Cancel order successfully!")
-//                .build();
-//    }
-//
-//    @PatchMapping("/order/shop/update/{orderId}")
-//    @PreAuthorize("hasAnyRole({'SELLER'})")
-//    public ApiSuccessResponse<Long> shopUpdateOrder(
-//            @PathVariable @Min(value = 1, message = "Order id must be greater than 0") long orderId
-//    ) {
-//        return ApiSuccessResponse.<Long>builder()
-//                .data(orderService.shopUpdateOrder(orderId))
-//                .status(HttpStatus.OK.value())
-//                .message("Update order successfully!")
-//                .build();
-//    }
+    @PatchMapping("/order/my-order/cancel/{orderId}")
+    @PreAuthorize("hasAnyRole({'CUSTOMER'})")
+    public ApiSuccessResponse<Long> userCancelOrder(
+            @PathVariable @Min(value = 1, message = "Order id must be greater than 0") long orderId
+    ) {
+        return ApiSuccessResponse.<Long>builder()
+                .data(orderService.userCancelOrder(orderId))
+                .status(HttpStatus.OK.value())
+                .message("Cancel order successfully!")
+                .build();
+    }
+
+    @PatchMapping("/order/shop/update/{orderId}")
+    @PreAuthorize("hasAnyRole({'SELLER'})")
+    public ApiSuccessResponse<Long> shopUpdateOrder(
+            @PathVariable @Min(value = 1, message = "Order id must be greater than 0") long orderId,
+            @Valid @RequestBody OrderUpdateRequestDTO orderUpdateRequestDTO
+    ) {
+        return ApiSuccessResponse.<Long>builder()
+                .data(orderService.shopUpdateOrder(orderId, orderUpdateRequestDTO))
+                .status(HttpStatus.OK.value())
+                .message("Update order successfully!")
+                .build();
+    }
 
 }
