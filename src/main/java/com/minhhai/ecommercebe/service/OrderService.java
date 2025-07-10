@@ -66,8 +66,9 @@ public class OrderService {
             }
             Shop shopWithOrders = productSkuWithOrder.getProduct().getShop();
 
-            if (shopWithOrdersMap.get(shopWithOrders.getId()) == null) {
-                Order newOrder = Order.builder()
+            Order order = shopWithOrdersMap.get(shopWithOrders.getId());
+            if (order == null) {
+                order = Order.builder()
                         .receiverAddress(orderRequestDTO.getReceiverAddress())
                         .receiverPhoneNumber(orderRequestDTO.getReceiverPhoneNumber())
                         .totalPrice(BigDecimal.ZERO)
@@ -78,33 +79,19 @@ public class OrderService {
                         .shop(shopWithOrders)
                         .build();
 
-                OrderDetail newOrderDetail = OrderDetail.builder()
-                        .quantity(quantityOrder)
-                        .priceEach(productSkuWithOrder.getPriceEach()
-                                .multiply(BigDecimal.valueOf(quantityOrder)))
-                        .productSku(productSkuWithOrder)
-                        .order(newOrder)
-                        .build();
-
-                newOrder.getOrderDetails().add(newOrderDetail);
-                newOrder.setTotalPrice(newOrderDetail.getPriceEach());
-
-                shopWithOrdersMap.put(shopWithOrders.getId(), newOrder);
-
-            } else {
-                Order order = shopWithOrdersMap.get(shopWithOrders.getId());
-
-                OrderDetail newOrderDetail = OrderDetail.builder()
-                        .quantity(quantityOrder)
-                        .priceEach(productSkuWithOrder.getPriceEach()
-                                .multiply(BigDecimal.valueOf(quantityOrder)))
-                        .productSku(productSkuWithOrder)
-                        .order(order)
-                        .build();
-
-                order.getOrderDetails().add(newOrderDetail);
-                order.setTotalPrice(order.getTotalPrice().add(newOrderDetail.getPriceEach()));
+                shopWithOrdersMap.put(shopWithOrders.getId(), order);
             }
+
+            OrderDetail newOrderDetail = OrderDetail.builder()
+                    .quantity(quantityOrder)
+                    .priceEach(productSkuWithOrder.getPriceEach()
+                            .multiply(BigDecimal.valueOf(quantityOrder)))
+                    .productSku(productSkuWithOrder)
+                    .order(order)
+                    .build();
+
+            order.getOrderDetails().add(newOrderDetail);
+            order.setTotalPrice(order.getTotalPrice().add(newOrderDetail.getPriceEach()));
 
             // Cập nhập lại số lượng sản phẩm còn lại sau khi order
             productSkuWithOrder.setQuantity((int) (productSkuWithOrder.getQuantity() - quantityOrder));
