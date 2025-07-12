@@ -32,7 +32,7 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(errorResponse);
-        response.getWriter().write(json);
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+        response.flushBuffer();
     }
 }

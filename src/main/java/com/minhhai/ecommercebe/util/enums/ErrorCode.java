@@ -25,6 +25,7 @@ public enum ErrorCode {
     EMAIL_EXISTED(409, "Email existed", HttpStatus.CONFLICT),
     CATEGORY_EXISTED(409, "Category existed", HttpStatus.CONFLICT),
     SELLER_ALREADY_HAS_SHOP(409, "Seller already has shop", HttpStatus.CONFLICT),
+    RESOURCE_NOT_FOUND(404, "Resource not found", HttpStatus.NOT_FOUND),
     AUTHORITY_NOT_SUPPORTED(400, "Authority not supported", HttpStatus.BAD_REQUEST),
     SHOP_NOT_EXISTED(400, "Shop not existed", HttpStatus.BAD_REQUEST),
     ORDER_UPDATE_FAILED(400, "Order update failed", HttpStatus.BAD_REQUEST),
