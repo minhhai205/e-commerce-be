@@ -1,6 +1,7 @@
 package com.minhhai.ecommercebe.configuration;
 
 import com.minhhai.ecommercebe.configuration.filter.JwtFilter;
+import com.minhhai.ecommercebe.configuration.securityCustom.CustomAccessDenied;
 import com.minhhai.ecommercebe.configuration.securityCustom.CustomAuthEntryPoint;
 import com.minhhai.ecommercebe.configuration.securityModel.PublicUrl;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class SecurityConfig {
     private final JpaUserDetailsService userDetailsService;
     private final JwtFilter jwtFilter;
     private final CustomAuthEntryPoint authEntryPoint;
+    private final CustomAccessDenied customAccessDenied;
 
     @Bean
     public SecurityFilterChain configure(@NonNull HttpSecurity http) throws Exception {
@@ -49,6 +51,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authEntryPoint)
+                        .accessDeniedHandler(customAccessDenied)
                 );
 
         return http.build();
