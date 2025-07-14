@@ -4,6 +4,7 @@ import com.minhhai.ecommercebe.configuration.securityModel.SecurityUser;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.exception.JwtException;
 import com.minhhai.ecommercebe.model.Token;
+import com.minhhai.ecommercebe.util.commons.AppConst;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import com.minhhai.ecommercebe.util.enums.TokenType;
 import io.jsonwebtoken.Claims;
@@ -20,10 +21,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -43,6 +41,7 @@ public class JwtService {
     private String refreshKey;
 
     private final TokenService tokenService;
+    private final RedisService redisService;
 
     public String generateToken(SecurityUser user, TokenType tokenType) {
         return generateToken(new HashMap<>(), user, tokenType);
@@ -58,13 +57,18 @@ public class JwtService {
                 throw new JwtException(ErrorCode.REFRESH_TOKEN_INVALID);
             }
         }
-        
+
         checkToken(token, tokenType);
     }
 
     public void checkToken(String token, TokenType tokenType) {
         if (tokenType.equals(TokenType.ACCESS_TOKEN)) {
             // check access token in black-list
+//            Optional<String> jtiRedis = redisService.get(
+//                    AppConst.TOKEN_PREFIX + extractJti(token, tokenType), String.class);
+//            if (jtiRedis.isPresent()) {
+//                throw new JwtException(ErrorCode.ACCESS_TOKEN_INVALID);
+//            }
             return;
         } else if (tokenType.equals(TokenType.REFRESH_TOKEN)) {
             tokenService.findByJti(extractJti(token, tokenType))
@@ -108,6 +112,10 @@ public class JwtService {
 
     public String extractUsername(String token, TokenType tokenType) {
         return extractClaim(token, tokenType, Claims::getSubject);
+    }
+
+    public Date extractExpiration(String token, TokenType tokenType) {
+        return extractClaim(token, tokenType, Claims::getExpiration);
     }
 
     public String extractJti(String token, TokenType tokenType) {

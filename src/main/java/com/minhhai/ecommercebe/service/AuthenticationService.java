@@ -7,6 +7,7 @@ import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.model.Token;
 import com.minhhai.ecommercebe.model.User;
 import com.minhhai.ecommercebe.repository.UserRepository;
+import com.minhhai.ecommercebe.util.commons.AppConst;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import com.minhhai.ecommercebe.util.enums.TokenType;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 
 @Slf4j
@@ -24,6 +27,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final RedisService redisService;
 
     public TokenResponseDTO authenticate(LoginRequestDTO loginRequestDTO) {
         log.info("---------- authenticate login ----------");
@@ -91,11 +95,18 @@ public class AuthenticationService {
         jwtService.validateToken(refreshToken, TokenType.REFRESH_TOKEN);
 
         // add access token to black-list
-        // ... do something
+        saveAccessTokenToBlackList(accessToken);
 
         // delete refresh token from DB
         tokenService.deleteByJti(jwtService.extractJti(refreshToken, TokenType.REFRESH_TOKEN));
 
         return "Logout successful!";
+    }
+
+    private void saveAccessTokenToBlackList(String accessToken) {
+        String jtiAccessToken = jwtService.extractJti(accessToken, TokenType.ACCESS_TOKEN);
+        Date expirationDate = jwtService.extractExpiration(accessToken, TokenType.ACCESS_TOKEN);
+        long timeout = (expirationDate.getTime() - new Date().getTime()) / 1000;
+        redisService.save(AppConst.TOKEN_PREFIX + jtiAccessToken, "black_list", timeout);
     }
 }
