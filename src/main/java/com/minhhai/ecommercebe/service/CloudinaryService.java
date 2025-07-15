@@ -25,4 +25,23 @@ public class CloudinaryService {
     public void deleteFile(String publicId) throws IOException {
         cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
     }
+
+    public String extractPublicIdFromUrl(String url) {
+        String[] parts = url.split("/upload/");
+        if (parts.length < 2) {
+            return "";
+        }
+
+        String path = parts[1];
+        if (path.startsWith("v")) {
+            path = path.substring(path.indexOf("/") + 1);
+        }
+
+        int dotIndex = path.lastIndexOf('.');
+        if (dotIndex != -1) {
+            path = path.substring(0, dotIndex);
+        }
+
+        return path;
+    }
 }

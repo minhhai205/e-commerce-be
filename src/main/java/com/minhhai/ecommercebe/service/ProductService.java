@@ -76,7 +76,9 @@ public class ProductService {
         return productMapper.toDetailResponseDTO(newProduct);
     }
 
-    public ProductDetailResponseDTO updateProduct(Long productId, ProductUpdateRequestDTO productUpdateRequestDTO) {
+    public ProductDetailResponseDTO updateProduct(Long productId,
+                                                  ProductUpdateRequestDTO productUpdateRequestDTO,
+                                                  MultipartFile fileThumbnail) {
         log.info("----------- Update product request -------------");
 
         Product productUpdate = productRepository.findById(productId).orElseThrow(
@@ -85,7 +87,24 @@ public class ProductService {
         productUpdate.setName(productUpdateRequestDTO.getName());
         productUpdate.setShortDesc(productUpdateRequestDTO.getShortDesc());
         productUpdate.setLongDesc(productUpdateRequestDTO.getLongDesc());
-        productUpdate.setThumbnail(productUpdateRequestDTO.getThumbnail());
+
+        if (!fileThumbnail.isEmpty()) {
+            try {
+                // Xóa thumbnail cũ qua publicId nhưng nên cần phải xem có phải thumbnail mặc định không nếu không
+                // sẽ xóa nhầm trong trường hợp thumbnail mặc định cũng lưu trên cloudinary, hoặc có thể không cần xóa.
+                String publicId = cloudinaryService.extractPublicIdFromUrl(productUpdate.getThumbnail());
+                if (!publicId.isEmpty()) {
+                    cloudinaryService.deleteFile(publicId);
+                }
+
+                String urlThumbnail = cloudinaryService.uploadFile(fileThumbnail, "ecommerce")
+                        .get("secure_url").toString();
+                productUpdate.setThumbnail(urlThumbnail);
+            } catch (IOException e) {
+                throw new AppException(ErrorCode.UPLOAD_CLOUDINARY_FAILED);
+            }
+        }
+
         Category category = categoryRepository.findByName(productUpdateRequestDTO.getCategoryName())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         productUpdate.setCategory(category);

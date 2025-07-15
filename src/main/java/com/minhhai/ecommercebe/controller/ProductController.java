@@ -61,13 +61,19 @@ public class ProductController {
     @PreAuthorize("hasAnyRole({'SELLER'})")
     public ApiSuccessResponse<ProductDetailResponseDTO> updateProduct(
             @PathVariable @Min(value = 1, message = "Product id must be greater than 0") long productId,
-            @Valid @RequestBody ProductUpdateRequestDTO productUpdateRequestDTO) {
-
-        return ApiSuccessResponse.<ProductDetailResponseDTO>builder()
-                .data(productService.updateProduct(productId, productUpdateRequestDTO))
-                .status(HttpStatus.OK.value())
-                .message("Update product successfully!")
-                .build();
+            @RequestParam("productUpdateRequestDTO") String productUpdateRequestDTO,
+            @RequestParam("fileThumbnail") MultipartFile fileThumbnail
+    ) {
+        try {
+            ProductUpdateRequestDTO dto = objectMapper.readValue(productUpdateRequestDTO, ProductUpdateRequestDTO.class);
+            return ApiSuccessResponse.<ProductDetailResponseDTO>builder()
+                    .data(productService.updateProduct(productId, dto, fileThumbnail))
+                    .status(HttpStatus.OK.value())
+                    .message("Update product successfully!")
+                    .build();
+        } catch (JsonProcessingException e) {
+            throw new AppException(ErrorCode.JSON_INVALID);
+        }
     }
 
     @GetMapping("/product/{productId}")
