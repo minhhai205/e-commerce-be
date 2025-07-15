@@ -1,7 +1,5 @@
 package com.minhhai.ecommercebe.model;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.minhhai.ecommercebe.util.annotations.EnumPattern;
 import com.minhhai.ecommercebe.util.enums.OrderStatus;
 import jakarta.persistence.*;
@@ -9,7 +7,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Set;
 
 @Entity

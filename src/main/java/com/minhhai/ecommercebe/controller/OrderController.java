@@ -2,11 +2,9 @@ package com.minhhai.ecommercebe.controller;
 
 import com.minhhai.ecommercebe.dto.request.OrderRequestDTO;
 import com.minhhai.ecommercebe.dto.request.OrderUpdateRequestDTO;
-import com.minhhai.ecommercebe.dto.request.UserRequestDTO;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiSuccessResponse;
 import com.minhhai.ecommercebe.dto.response.OrderResponseDTO;
 import com.minhhai.ecommercebe.service.OrderService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

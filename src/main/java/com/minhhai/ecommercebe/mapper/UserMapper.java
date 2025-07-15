@@ -2,7 +2,6 @@ package com.minhhai.ecommercebe.mapper;
 
 import com.minhhai.ecommercebe.dto.request.UserRequestDTO;
 import com.minhhai.ecommercebe.dto.response.UserResponseDTO;
-import com.minhhai.ecommercebe.model.Role;
 import com.minhhai.ecommercebe.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

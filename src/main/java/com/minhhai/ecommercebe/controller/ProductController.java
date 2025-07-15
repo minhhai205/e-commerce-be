@@ -4,29 +4,22 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.minhhai.ecommercebe.dto.request.ProductRequestDTO;
 import com.minhhai.ecommercebe.dto.request.ProductUpdateRequestDTO;
-import com.minhhai.ecommercebe.dto.request.UserRequestDTO;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiSuccessResponse;
-import com.minhhai.ecommercebe.dto.response.ApiResponse.PageResponse;
 import com.minhhai.ecommercebe.dto.response.ProductDetailResponseDTO;
-import com.minhhai.ecommercebe.dto.response.ProductResponseDTO;
-import com.minhhai.ecommercebe.dto.response.UserResponseDTO;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.service.ProductService;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 @RestController
 @Validated

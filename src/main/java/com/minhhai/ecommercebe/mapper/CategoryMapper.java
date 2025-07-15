@@ -3,7 +3,6 @@ package com.minhhai.ecommercebe.mapper;
 import com.minhhai.ecommercebe.dto.request.CategoryRequestDTO;
 import com.minhhai.ecommercebe.dto.response.CategoryResponseDTO;
 import com.minhhai.ecommercebe.model.Category;
-import com.minhhai.ecommercebe.model.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 

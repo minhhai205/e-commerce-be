@@ -1,6 +1,5 @@
 package com.minhhai.ecommercebe.repository;
 
-import com.cosium.spring.data.jpa.entity.graph.repository.EntityGraphCrudRepository;
 import com.minhhai.ecommercebe.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

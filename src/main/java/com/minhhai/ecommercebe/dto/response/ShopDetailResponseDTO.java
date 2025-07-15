@@ -1,6 +1,5 @@
 package com.minhhai.ecommercebe.dto.response;
 
-import com.minhhai.ecommercebe.model.User;
 import com.minhhai.ecommercebe.util.enums.ShopStatus;
 import lombok.Builder;
 import lombok.Getter;

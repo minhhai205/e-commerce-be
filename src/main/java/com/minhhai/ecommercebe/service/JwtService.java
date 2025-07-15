@@ -3,8 +3,6 @@ package com.minhhai.ecommercebe.service;
 import com.minhhai.ecommercebe.configuration.securityModel.SecurityUser;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.exception.JwtException;
-import com.minhhai.ecommercebe.model.Token;
-import com.minhhai.ecommercebe.util.commons.AppConst;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import com.minhhai.ecommercebe.util.enums.TokenType;
 import io.jsonwebtoken.Claims;
@@ -15,9 +13,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -41,7 +37,7 @@ public class JwtService {
     private String refreshKey;
 
     private final TokenService tokenService;
-    private final RedisService redisService;
+    // private final RedisService redisService;
 
     public String generateToken(SecurityUser user, TokenType tokenType) {
         return generateToken(new HashMap<>(), user, tokenType);

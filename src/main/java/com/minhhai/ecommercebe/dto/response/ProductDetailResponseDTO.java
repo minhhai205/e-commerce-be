@@ -1,8 +1,6 @@
 package com.minhhai.ecommercebe.dto.response;
 
-import com.minhhai.ecommercebe.dto.request.CategoryRequestDTO;
 import com.minhhai.ecommercebe.dto.request.ProductSkuRequestDTO;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

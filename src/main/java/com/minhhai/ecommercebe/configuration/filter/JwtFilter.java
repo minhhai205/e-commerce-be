@@ -3,7 +3,6 @@ package com.minhhai.ecommercebe.configuration.filter;
 
 import com.minhhai.ecommercebe.configuration.securityCustom.CustomAuthEntryPoint;
 import com.minhhai.ecommercebe.configuration.securityModel.PublicUrl;
-import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.exception.JwtException;
 import com.minhhai.ecommercebe.service.JpaUserDetailsService;
 import com.minhhai.ecommercebe.service.JwtService;
@@ -16,10 +15,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -27,7 +23,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 

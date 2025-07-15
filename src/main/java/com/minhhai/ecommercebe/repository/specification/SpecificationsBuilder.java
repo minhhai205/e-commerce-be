@@ -1,7 +1,5 @@
 package com.minhhai.ecommercebe.repository.specification;
 
-
-import com.minhhai.ecommercebe.model.User;
 import com.minhhai.ecommercebe.util.enums.SearchOperation;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;

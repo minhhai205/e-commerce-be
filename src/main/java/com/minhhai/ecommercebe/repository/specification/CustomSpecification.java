@@ -1,6 +1,5 @@
 package com.minhhai.ecommercebe.repository.specification;
 
-import com.minhhai.ecommercebe.model.User;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;

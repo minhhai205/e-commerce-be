@@ -1,7 +1,6 @@
 package com.minhhai.ecommercebe.service;
 
 import com.minhhai.ecommercebe.dto.request.ReviewRequestDTO;
-import com.minhhai.ecommercebe.dto.response.ApiResponse.PageResponse;
 import com.minhhai.ecommercebe.dto.response.ReviewResponseDTO;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.mapper.ReviewMapper;
@@ -15,7 +14,6 @@ import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

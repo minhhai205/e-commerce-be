@@ -1,6 +1,5 @@
 package com.minhhai.ecommercebe.dto.response;
 
-import com.minhhai.ecommercebe.model.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

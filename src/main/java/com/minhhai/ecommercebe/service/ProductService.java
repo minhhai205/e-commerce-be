@@ -3,10 +3,7 @@ package com.minhhai.ecommercebe.service;
 import com.minhhai.ecommercebe.dto.request.ProductRequestDTO;
 import com.minhhai.ecommercebe.dto.request.ProductSkuUpdateRequestDTO;
 import com.minhhai.ecommercebe.dto.request.ProductUpdateRequestDTO;
-import com.minhhai.ecommercebe.dto.response.ApiResponse.PageResponse;
 import com.minhhai.ecommercebe.dto.response.ProductDetailResponseDTO;
-import com.minhhai.ecommercebe.dto.response.ProductResponseDTO;
-import com.minhhai.ecommercebe.dto.response.UserResponseDTO;
 import com.minhhai.ecommercebe.exception.AppException;
 import com.minhhai.ecommercebe.mapper.ProductMapper;
 import com.minhhai.ecommercebe.model.*;
@@ -17,7 +14,6 @@ import com.minhhai.ecommercebe.util.commons.SecurityUtil;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

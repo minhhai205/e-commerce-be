@@ -3,8 +3,6 @@ package com.minhhai.ecommercebe.exception;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
 import lombok.Getter;
 
-import javax.tools.Diagnostic;
-
 @Getter
 public class AppException extends RuntimeException {
 
