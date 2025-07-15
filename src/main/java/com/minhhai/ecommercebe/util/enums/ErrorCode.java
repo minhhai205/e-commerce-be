@@ -15,6 +15,8 @@ public enum ErrorCode {
     FORBIDDEN_DELETE_REVIEW(403, "Forbidden delete review", HttpStatus.FORBIDDEN),
     FORBIDDEN_UPDATE_ORDER(403, "Forbidden update order", HttpStatus.FORBIDDEN),
     TOKEN_TYPE_INVALID(400, "Token type invalid", HttpStatus.BAD_REQUEST),
+    JSON_INVALID(400, "JSON invalid", HttpStatus.BAD_REQUEST),
+    UPLOAD_CLOUDINARY_FAILED(400, "Upload cloudinary failed", HttpStatus.BAD_REQUEST),
     ACCESS_TOKEN_INVALID(401, "Access token invalid", HttpStatus.UNAUTHORIZED),
     REFRESH_TOKEN_INVALID(401, "Refresh token invalid", HttpStatus.UNAUTHORIZED),
     ACCESS_TOKEN_BLACK_LIST(401, "Access token black list", HttpStatus.UNAUTHORIZED),

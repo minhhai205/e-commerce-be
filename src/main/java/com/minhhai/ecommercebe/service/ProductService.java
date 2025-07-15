@@ -19,7 +19,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,8 +33,9 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final ShopRepository shopRepository;
     private final CategoryRepository categoryRepository;
+    private final CloudinaryService cloudinaryService;
 
-    public ProductDetailResponseDTO createNewProduct(ProductRequestDTO productRequestDTO) {
+    public ProductDetailResponseDTO createNewProduct(ProductRequestDTO productRequestDTO, MultipartFile fileThumbnail) {
 
         log.info("------------ Create new product request --------------");
         Product newProduct = productMapper.toEntity(productRequestDTO);
@@ -46,6 +49,21 @@ public class ProductService {
         newProduct.getProductSku().forEach(productSku -> {
             productSku.setProduct(newProduct);
         });
+
+        // upload thumbnail to cloudinary and set url for entity
+        if (!fileThumbnail.isEmpty()) {
+            try {
+                String urlThumbnail = cloudinaryService.uploadFile(fileThumbnail, "ecommerce")
+                        .get("secure_url").toString();
+                newProduct.setThumbnail(urlThumbnail);
+            } catch (IOException e) {
+                throw new AppException(ErrorCode.UPLOAD_CLOUDINARY_FAILED);
+            }
+        } else {
+            // Xét 1 thumbnail mặc định
+            newProduct.setThumbnail("string");
+        }
+
 
         User userCreateProduct = SecurityUtil.getCurrentUser();
         Shop shop = shopRepository.findShopByUserId(userCreateProduct.getId()).orElseThrow(
