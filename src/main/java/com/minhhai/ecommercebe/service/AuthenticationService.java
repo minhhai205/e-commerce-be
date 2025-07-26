@@ -71,10 +71,10 @@ public class AuthenticationService {
         String newAccessToken = jwtService.generateToken(new SecurityUser(user), TokenType.ACCESS_TOKEN);
         String newRefreshToken = jwtService.generateToken(new SecurityUser(user), TokenType.REFRESH_TOKEN);
 
-        // delete old access token from DB
+        // delete old refresh token from DB
         tokenService.deleteByJti(jwtService.extractJti(refreshToken, TokenType.REFRESH_TOKEN));
 
-        // save new access token to DB
+        // save new refresh token to DB
         tokenService.save(Token.builder()
                 .jti(jwtService.extractJti(newRefreshToken, TokenType.REFRESH_TOKEN))
                 .build());
