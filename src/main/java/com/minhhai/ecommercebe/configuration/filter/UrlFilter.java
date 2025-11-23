@@ -1,8 +1,10 @@
 package com.minhhai.ecommercebe.configuration.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.minhhai.ecommercebe.configuration.securityModel.PublicUrl;
 import com.minhhai.ecommercebe.dto.response.ApiResponse.ApiErrorResponse;
 import com.minhhai.ecommercebe.util.enums.ErrorCode;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,31 +16,47 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.PathContainer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class UrlFilter extends OncePerRequestFilter {
+
     private final RequestMappingHandlerMapping handlerMapping;
+
+    private final Set<PathPattern> ignoredPathPatterns = new HashSet<>();
+    private final Set<PathPattern> handlerPathPatterns = new HashSet<>();
+    private final PathPatternParser parser = new PathPatternParser();
+
+    @PostConstruct
+    public void init() {
+        PublicUrl.IGNORED_PATTERNS.forEach(p -> ignoredPathPatterns.add(parser.parse(p)));
+        handlerMapping.getHandlerMethods().keySet().forEach(info ->
+                info.getPatternValues().forEach(pattern -> handlerPathPatterns.add(parser.parse(pattern)))
+        );
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        log.info("---------- do filter url ----------");
+        String requestUri = request.getRequestURI();
+        PathContainer requestPath = PathContainer.parsePath(requestUri);
 
-        PathPatternParser parser = new PathPatternParser();
+        log.info("---------- do filter url: {} ----------", requestUri);
 
-        boolean matched = handlerMapping.getHandlerMethods().keySet().stream()
-                .flatMap(info -> info.getPatternValues().stream())
-                .map(parser::parse)
-                .anyMatch(pattern ->
-                        pattern.matches(PathContainer.parsePath(request.getRequestURI())));
+        if (ignoredPathPatterns.stream().anyMatch(pattern -> pattern.matches(requestPath))) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-        if (!matched) {
+        if (handlerPathPatterns.stream().noneMatch(pattern -> pattern.matches(requestPath))) {
             response.setStatus(HttpStatus.OK.value());
             response.setContentType("application/json;charset=UTF-8");
 

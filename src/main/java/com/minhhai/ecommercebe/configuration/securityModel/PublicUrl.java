@@ -6,4 +6,12 @@ public class PublicUrl {
     public static final List<String> WHITE_LIST = List.of(
             "/auth/**", "/payment/vn-pay-callback"
     );
+
+    public static final List<String> IGNORED_PATTERNS = List.of(
+            "/actuator/**",
+            "/v3/**",
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/swagger-ui.html"
+    );
 }
